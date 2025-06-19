@@ -4,8 +4,8 @@
 
 玩家將操控「團結 Band」的成員，使用她們的樂器作為炸彈，在舞台上盡情揮灑，透過爆炸將地盤染上自己的顏色。在時間結束時，佔有最廣闊地盤的玩家將獲得勝利！
 
-![Game Screenshot](https://i.imgur.com/gK6wZJ1.png)
-*(這是一個範例圖片，您可以替換成您的遊戲截圖)*
+<!-- ![Game Screenshot](https://i.imgur.com/gK6wZJ1.png)
+*(這是一個範例圖片，您可以替換成您的遊戲截圖)* -->
 
 ## 遊戲特色
 
@@ -29,7 +29,7 @@
     * **移動**: `W` `A` `S` `D`
     * **放置炸彈**: `Left Shift`
 
-## 安裝與編譯
+<!-- ## 安裝與編譯
 
 本專案使用 Allegro 5 函式庫，請確保您已安裝 C++ 編譯器 (如 GCC/G++) 與對應的 Allegro 5 開發套件。
 
@@ -67,7 +67,7 @@ g++ -o bocchi_bomber \
 ```
 > **注意**: 上述指令適用於 Linux/macOS 或 Windows 上的 MinGW/MSYS2 環境。如果您使用 Visual Studio，請在專案屬性中設定對應的標頭檔與函式庫路徑。
 
-編譯成功後，會生成一個名為 `bocchi_bomber` (或 `bocchi_bomber.exe`) 的執行檔。
+編譯成功後，會生成一個名為 `bocchi_bomber` (或 `bocchi_bomber.exe`) 的執行檔。 -->
 
 ## 專案結構
 ```
