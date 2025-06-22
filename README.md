@@ -37,6 +37,24 @@ Within the time limit, use bomb explosions to color as many floor tiles as possi
 
 ---
 
+## 📷 Demo Images & Videos
+
+### Screenshots
+
+![Screenshot 1](images/image1.png)
+![Screenshot 2](images/image2.png)
+![Screenshot 3](images/image3.png)
+![Screenshot 4](images/image4.png)
+
+### Gameplay Video
+
+<video controls width="100%">
+  <source src="images/vedio.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+---
+
 ## 🛠️ Installation & Compilation
 
 This project uses the Allegro 5 library. Please ensure you have a C++ compiler (e.g., GCC/G++) and Code::Blocks installed.
