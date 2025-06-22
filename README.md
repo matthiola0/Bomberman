@@ -46,12 +46,11 @@ Within the time limit, use bomb explosions to color as many floor tiles as possi
 ![Screenshot 3](images/image3.png)
 ![Screenshot 4](images/image4.png)
 
+
 ### Gameplay Video
 
-<video controls width="100%">
-  <source src="images/vedio.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[![Watch the demo](https://img.youtube.com/vi/plwuGUrNsGw/0.jpg)](https://www.youtube.com/watch?v=plwuGUrNsGw)
+
 
 ---
 
