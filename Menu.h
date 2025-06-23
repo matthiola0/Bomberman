@@ -62,7 +62,8 @@ public:
     int getScore4() { return Score4; }
 
     bool if_gaame_started() { return game_started; }
-
+    void set_game_started(bool status) { game_started = status; }
+    
     bool win();
 
 private:

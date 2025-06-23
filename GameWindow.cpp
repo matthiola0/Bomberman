@@ -236,6 +236,81 @@ GameWindow::game_run()
 int
 GameWindow::game_update() 
 {
+    if (menu->if_gaame_started())
+    {
+        // fprintf(stderr, "DEBUG: Game has started, updating time. Current Time = %d\n", menu->getTime());
+
+        int randomNum = rand() % 320;
+        if (randomNum == 0) {
+            bandmemberSet[player3]->changeDir(2); // move up
+            moving3 = true;
+        } else if (randomNum == 1) {
+            bandmemberSet[player3]->changeDir(3); // move down
+            moving3 = true;
+        } else if (randomNum == 2) {
+            bandmemberSet[player3]->changeDir(0); // move left
+            moving3 = true;
+        } else if (randomNum == 3) {
+            bandmemberSet[player3]->changeDir(1); // move right
+        }
+        else if (randomNum == 4) {
+            Bomb* bomb = new Bomb(bandmemberSet[player3]->getX(), bandmemberSet[player3]->getY(), BandMemberClass[player3]);
+            bombSet.push_back(bomb);
+        }
+
+        randomNum = rand() % 320;
+        if (randomNum == 0) {
+            bandmemberSet[player4]->changeDir(2); // move up
+            moving4 = true;
+        } else if (randomNum == 1) {
+            bandmemberSet[player4]->changeDir(3); // move down
+            moving4 = true;
+        } else if (randomNum == 2) {
+            bandmemberSet[player4]->changeDir(0); // move left
+            moving4 = true;
+        } else if (randomNum == 3) {
+            bandmemberSet[player4]->changeDir(1); // move right
+        }
+        else if (randomNum == 4) {
+            Bomb* bomb = new Bomb(bandmemberSet[player4]->getX(), bandmemberSet[player4]->getY(), BandMemberClass[player4]);
+            bombSet.push_back(bomb);
+        }
+
+        if (!two_player) {
+            randomNum = rand() % 320;
+            if (randomNum == 0) {
+                bandmemberSet[player2]->changeDir(2); // move up
+                moving2 = true;
+            } else if (randomNum == 1) {
+                bandmemberSet[player2]->changeDir(3); // move down
+                moving2 = true;
+            } else if (randomNum == 2) {
+                bandmemberSet[player2]->changeDir(0); // move left
+                moving2 = true;
+            } else if (randomNum == 3) {
+                bandmemberSet[player2]->changeDir(1); // move right
+            }
+            else if (randomNum == 4) {
+                Bomb* bomb = new Bomb(bandmemberSet[player2]->getX(), bandmemberSet[player2]->getY(), BandMemberClass[player2]);
+                bombSet.push_back(bomb);
+            }
+        }
+
+        menu->Change_Time();
+    }
+
+    for (int i = BOCCHI; i <= KITA; i++) {
+        bandmemberSet[i]->change_counter();
+
+        if (bandmemberSet[i]->getSCounter() <= 0)
+            bandmemberSet[i]->SpeedChange(1);
+    }
+
+    for (int i=0; i<bombSet.size(); i++)
+    {
+        bombSet[i]->change_counter();
+    }
+
     //test if is legal
     //player1
     int dir = bandmemberSet[player1]->getDir();
@@ -332,6 +407,10 @@ GameWindow::game_reset()
     bandmemberSet.clear();
     bombSet.clear();
 
+    moving1 = false;
+    moving2 = false;
+    moving3 = false;
+    moving4 = false;
 
     Time_Inc_Count = 0;
     // Monster_Pro_Count = 0;
@@ -423,80 +502,80 @@ GameWindow::process_event()
         if(event.timer.source == timer) {
             redraw = true;
 
-            if (menu->if_gaame_started())
-            {
-                // fprintf(stderr, "DEBUG: Game has started, updating time. Current Time = %d\n", menu->getTime());
+            // if (menu->if_gaame_started())
+            // {
+            //     // fprintf(stderr, "DEBUG: Game has started, updating time. Current Time = %d\n", menu->getTime());
 
-                int randomNum = rand() % 320;
-                if (randomNum == 0) {
-                    bandmemberSet[player3]->changeDir(2); // move up
-                    moving3 = true;
-                } else if (randomNum == 1) {
-                    bandmemberSet[player3]->changeDir(3); // move down
-                    moving3 = true;
-                } else if (randomNum == 2) {
-                    bandmemberSet[player3]->changeDir(0); // move left
-                    moving3 = true;
-                } else if (randomNum == 3) {
-                    bandmemberSet[player3]->changeDir(1); // move right
-                }
-                else if (randomNum == 4) {
-                    Bomb* bomb = new Bomb(bandmemberSet[player3]->getX(), bandmemberSet[player3]->getY(), BandMemberClass[player3]);
-                    bombSet.push_back(bomb);
-                }
+            //     int randomNum = rand() % 320;
+            //     if (randomNum == 0) {
+            //         bandmemberSet[player3]->changeDir(2); // move up
+            //         moving3 = true;
+            //     } else if (randomNum == 1) {
+            //         bandmemberSet[player3]->changeDir(3); // move down
+            //         moving3 = true;
+            //     } else if (randomNum == 2) {
+            //         bandmemberSet[player3]->changeDir(0); // move left
+            //         moving3 = true;
+            //     } else if (randomNum == 3) {
+            //         bandmemberSet[player3]->changeDir(1); // move right
+            //     }
+            //     else if (randomNum == 4) {
+            //         Bomb* bomb = new Bomb(bandmemberSet[player3]->getX(), bandmemberSet[player3]->getY(), BandMemberClass[player3]);
+            //         bombSet.push_back(bomb);
+            //     }
 
-                randomNum = rand() % 320;
-                if (randomNum == 0) {
-                    bandmemberSet[player4]->changeDir(2); // move up
-                    moving4 = true;
-                } else if (randomNum == 1) {
-                    bandmemberSet[player4]->changeDir(3); // move down
-                    moving4 = true;
-                } else if (randomNum == 2) {
-                    bandmemberSet[player4]->changeDir(0); // move left
-                    moving4 = true;
-                } else if (randomNum == 3) {
-                    bandmemberSet[player4]->changeDir(1); // move right
-                }
-                else if (randomNum == 4) {
-                    Bomb* bomb = new Bomb(bandmemberSet[player4]->getX(), bandmemberSet[player4]->getY(), BandMemberClass[player4]);
-                    bombSet.push_back(bomb);
-                }
+            //     randomNum = rand() % 320;
+            //     if (randomNum == 0) {
+            //         bandmemberSet[player4]->changeDir(2); // move up
+            //         moving4 = true;
+            //     } else if (randomNum == 1) {
+            //         bandmemberSet[player4]->changeDir(3); // move down
+            //         moving4 = true;
+            //     } else if (randomNum == 2) {
+            //         bandmemberSet[player4]->changeDir(0); // move left
+            //         moving4 = true;
+            //     } else if (randomNum == 3) {
+            //         bandmemberSet[player4]->changeDir(1); // move right
+            //     }
+            //     else if (randomNum == 4) {
+            //         Bomb* bomb = new Bomb(bandmemberSet[player4]->getX(), bandmemberSet[player4]->getY(), BandMemberClass[player4]);
+            //         bombSet.push_back(bomb);
+            //     }
 
-                if (!two_player) {
-                    randomNum = rand() % 320;
-                    if (randomNum == 0) {
-                        bandmemberSet[player2]->changeDir(2); // move up
-                        moving2 = true;
-                    } else if (randomNum == 1) {
-                        bandmemberSet[player2]->changeDir(3); // move down
-                        moving2 = true;
-                    } else if (randomNum == 2) {
-                        bandmemberSet[player2]->changeDir(0); // move left
-                        moving2 = true;
-                    } else if (randomNum == 3) {
-                        bandmemberSet[player2]->changeDir(1); // move right
-                    }
-                    else if (randomNum == 4) {
-                        Bomb* bomb = new Bomb(bandmemberSet[player2]->getX(), bandmemberSet[player2]->getY(), BandMemberClass[player2]);
-                        bombSet.push_back(bomb);
-                    }
-                }
+            //     if (!two_player) {
+            //         randomNum = rand() % 320;
+            //         if (randomNum == 0) {
+            //             bandmemberSet[player2]->changeDir(2); // move up
+            //             moving2 = true;
+            //         } else if (randomNum == 1) {
+            //             bandmemberSet[player2]->changeDir(3); // move down
+            //             moving2 = true;
+            //         } else if (randomNum == 2) {
+            //             bandmemberSet[player2]->changeDir(0); // move left
+            //             moving2 = true;
+            //         } else if (randomNum == 3) {
+            //             bandmemberSet[player2]->changeDir(1); // move right
+            //         }
+            //         else if (randomNum == 4) {
+            //             Bomb* bomb = new Bomb(bandmemberSet[player2]->getX(), bandmemberSet[player2]->getY(), BandMemberClass[player2]);
+            //             bombSet.push_back(bomb);
+            //         }
+            //     }
 
-                menu->Change_Time();
-            }
+            //     menu->Change_Time();
+            // }
 
-            for (int i = BOCCHI; i <= KITA; i++) {
-                bandmemberSet[i]->change_counter();
+            // for (int i = BOCCHI; i <= KITA; i++) {
+            //     bandmemberSet[i]->change_counter();
 
-                if (bandmemberSet[i]->getSCounter() <= 0)
-                    bandmemberSet[i]->SpeedChange(1);
-            }
+            //     if (bandmemberSet[i]->getSCounter() <= 0)
+            //         bandmemberSet[i]->SpeedChange(1);
+            // }
 
-            for (int i=0; i<bombSet.size(); i++)
-            {
-                bombSet[i]->change_counter();
-            }
+            // for (int i=0; i<bombSet.size(); i++)
+            // {
+            //     bombSet[i]->change_counter();
+            // }
         }
     }
     else if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -813,6 +892,10 @@ GameWindow::process_event()
                         for (int it = BOCCHI; it <= KITA; it++) {
                             bandmemberSet[it]->Reset();
                         }
+                        moving1 = false;
+                        moving2 = false;
+                        moving3 = false;
+                        moving4 = false;
                         level->Reset(1);
                         scene = GAMESCHOOL;
                     }
@@ -821,6 +904,10 @@ GameWindow::process_event()
                         for (int it = BOCCHI; it <= KITA; it++) {
                             bandmemberSet[it]->Reset();
                         }
+                        moving1 = false;
+                        moving2 = false;
+                        moving3 = false;
+                        moving4 = false;
                         level->Reset(2);
                         scene = GAMEHOME;
                     }
@@ -829,12 +916,18 @@ GameWindow::process_event()
                         for (int it = BOCCHI; it <= KITA; it++) {
                             bandmemberSet[it]->Reset();
                         }
+                        moving1 = false;
+                        moving2 = false;
+                        moving3 = false;
+                        moving4 = false;
                         level->Reset(3);
                         scene = GAMESTARRY;
                     }
                 case GAMEEND:
-                    if (mouse_hover(0, 540,  188-0, 580-540)) 
+                    if (mouse_hover(0, 540,  188-0, 580-540)) {
                         scene = MENU;
+                        menu->set_game_started(false);
+                    }
                     else if (mouse_hover(694, 540,  785-694, 580-540))
                         return GAME_EXIT;
                     break;
@@ -850,7 +943,7 @@ GameWindow::process_event()
 
     if(redraw) {
         // update each object in game
-        instruction = game_update();
+        // instruction = game_update();
 
         // Re-draw map
         switch (scene) {
@@ -891,18 +984,21 @@ GameWindow::process_event()
                 if (menu->getTime() <= 0) {
                     scene = GAMEEND; 
                 }
+                instruction = game_update();
                 draw_running_map(GAMESCHOOL);
                 break;
             case GAMEHOME:
                 if (menu->getTime() <= 0) {
                     scene = GAMEEND; 
                 }
+                instruction = game_update();
                 draw_running_map(GAMEHOME);
                 break;
             case GAMESTARRY:
                 if (menu->getTime() <= 0) {
                     scene = GAMEEND; 
                 }
+                instruction = game_update();
                 draw_running_map(GAMESTARRY);
                 break;
             case GAMEPAUSE:
