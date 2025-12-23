@@ -20,7 +20,7 @@ Slider::Slider(int pos_x = 0, int pos_y = 0)
 
     degree = 1.0;
 
-    font = al_load_ttf_font("Caviar_Dreams_Bold.ttf", font_size, 0); // load font
+    font = al_load_ttf_font("src/Caviar_Dreams_Bold.ttf", font_size, 0); // load font
     strncpy(label, "label", 20);
 }
 

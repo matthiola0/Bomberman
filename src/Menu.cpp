@@ -28,33 +28,33 @@ Menu::Menu()
     game_started = false;
 
 
-    bocchi_img = al_load_bitmap("./Asset/bocchi_small.png");
+    bocchi_img = al_load_bitmap("src/Asset/bocchi_small.png");
     if (!bocchi_img) {
-        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap './Asset/bocchi_small.png'\n");
+        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap 'src/Asset/bocchi_small.png'\n");
         exit(1);
     }
 
-    ijichi_img = al_load_bitmap("./Asset/ijichi_small.png");
+    ijichi_img = al_load_bitmap("src/Asset/ijichi_small.png");
     if (!ijichi_img) {
-        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap './Asset/ijichi_small.png'\n");
+        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap 'src/Asset/ijichi_small.png'\n");
         exit(1);
     }
 
-    yamada_img = al_load_bitmap("./Asset/yamada_small.png");
+    yamada_img = al_load_bitmap("src/Asset/yamada_small.png");
     if (!yamada_img) {
-        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap './Asset/yamada_small.png'\n");
+        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap 'src/Asset/yamada_small.png'\n");
         exit(1);
     }
 
-    kita_img = al_load_bitmap("./Asset/kita_small.png");
+    kita_img = al_load_bitmap("src/Asset/kita_small.png");
     if (!kita_img) {
-        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap './Asset/kita_small.png'\n");
+        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load bitmap 'src/Asset/kita_small.png'\n");
         exit(1);
     }
 
-    menuFont = al_load_ttf_font("pirulen.ttf", 12, 0);
+    menuFont = al_load_ttf_font("src/pirulen.ttf", 12, 0);
     if (!menuFont) {
-        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load font 'pirulen.ttf'\n");
+        fprintf(stderr, "FATAL ERROR in Menu.cpp: Failed to load font 'src/pirulen.ttf'\n");
         exit(1);
     }
 }
@@ -148,7 +148,7 @@ Menu::Load(int player1_, int player2_, int player3_, int player4_) {
     // player4_img = al_load_bitmap(buffer);
 
 
-    menuFont = al_load_ttf_font("pirulen.ttf", 12, 0); // load font
+    menuFont = al_load_ttf_font("src/pirulen.ttf", 12, 0); // load font
     if (!menuFont) {
         fprintf(stderr, "FATAL ERROR: Failed to load font 'pirulen.ttf'\n");
         exit(1);

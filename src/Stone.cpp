@@ -22,7 +22,7 @@ Stone::~Stone()
 void
 Stone::Load()
 {
-    img = al_load_bitmap("./Asset/chair.png");
+    img = al_load_bitmap("src/Asset/chair.png");
 }
  
 void

@@ -9,15 +9,10 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [
-                {
-                    "name": "PATH",
-                    "value": "${env:PATH};${workspaceFolder}"
-                }
-            ],
+            "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "gdb",
+            "miDebuggerPath": "gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -26,24 +21,6 @@
                 }
             ],
             "preLaunchTask": "Build Bomberman (Debug)"
-        },
-        {
-            "name": "Run Bomberman",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/Bomberman.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [
-                {
-                    "name": "PATH",
-                    "value": "${env:PATH};${workspaceFolder}"
-                }
-            ],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "preLaunchTask": "Build Bomberman"
         }
     ]
 }

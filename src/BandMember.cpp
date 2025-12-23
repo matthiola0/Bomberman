@@ -56,20 +56,20 @@ BandMember::Reset(int lw) {
     int col = 0, row = 0;
     if (lw == 25) {
         switch (character) {
-            case BOCCHI: col = 2; row = 2; break;
-            case IJICHI: col = 22; row = 2; break;
-            case YAMADA: col = 2; row = 22; break;
-            case KITA: col = 22; row = 22; break;
+            case BOCCHI: col = 1; row = 1; break;
+            case IJICHI: col = 23; row = 1; break;
+            case YAMADA: col = 1; row = 23; break;
+            case KITA: col = 23; row = 23; break;
         }
     } else {
         switch (character) {
-            case BOCCHI: col = 4; row = 6; break;
-            case IJICHI: col = 12; row = 6; break;
-            case YAMADA: col = 4; row = 11; break;
-            case KITA: col = 12; row = 11; break;
+            case BOCCHI: col = 1; row = 1; break;
+            case IJICHI: col = 13; row = 1; break;
+            case YAMADA: col = 1; row = 13; break;
+            case KITA: col = 13; row = 13; break;
         }
     }
-    speed = 1;
+    speed = 2;
     speed_counter = 0;
     circle->x = col * grid_width + grid_width/2;
     circle->y = row * grid_height + grid_height/2;
@@ -79,7 +79,7 @@ bool
 BandMember::Load()
 {
     char buffer[50];
-    sprintf(buffer, "./Asset/%s.png", class_name);
+    sprintf(buffer, "src/Asset/%s.png", class_name);
 
     // 載入點陣圖
     img = al_load_bitmap(buffer);

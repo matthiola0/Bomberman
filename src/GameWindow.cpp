@@ -31,7 +31,7 @@ ALLEGRO_BITMAP* GameWindow::load_bitmap_safely(const char* path)
 {
     ALLEGRO_BITMAP* bmp = al_load_bitmap(path);
     if (!bmp) {
-        // 如果載入失敗，直接顯示錯誤訊息並終止遊戲
+        // 如�?載入失�?，直?�顯示錯誤�??�並終止?�戲
         fprintf(stderr, "Fatal Error: Failed to load bitmap: %s\n", path);
         show_err_msg(GAME_TERMINATE);
     }
@@ -42,7 +42,7 @@ ALLEGRO_FONT* GameWindow::load_font_safely(const char* path, int size, int flags
 {
     ALLEGRO_FONT* font = al_load_ttf_font(path, size, flags);
     if (!font) {
-        // 如果載入失敗，直接顯示錯誤訊息並終止遊戲
+        // 如�?載入失�?，直?�顯示錯誤�??�並終止?�戲
         fprintf(stderr, "Fatal Error: Failed to load font: %s\n", path);
         show_err_msg(GAME_TERMINATE);
     }
@@ -54,33 +54,33 @@ GameWindow::game_init()
 {
     // char buffer[50];
 
-    icon = load_bitmap_safely("./icon.png");
-    background1 = load_bitmap_safely("./Asset/school.jpg");
-    background2 = load_bitmap_safely("./Asset/home.jpg");
-    background3 = load_bitmap_safely("./Asset/starry.png");
-    background_menu = load_bitmap_safely("./Asset/menu.png");
-    background_charchoose = load_bitmap_safely("./Asset/characterchoose.png");
-    background_charstory = load_bitmap_safely("./Asset/characterstory.png");
-    background_introduce = load_bitmap_safely("./Asset/introduce.png");
-    background_pause = load_bitmap_safely("./Asset/pause.png");
-    background_win = load_bitmap_safely("./Asset/win.png");
-    background_lose = load_bitmap_safely("./Asset/lose.png");
-    background_P1_P2 = load_bitmap_safely("./Asset/P1_P2.png");
-    background_P2_P1 = load_bitmap_safely("./Asset/P2_P1.png");
-    background_P2_P1bocchi = load_bitmap_safely("./Asset/P2_P1bocchi.png");
-    background_P2_P1ijichi = load_bitmap_safely("./Asset/P2_P1ijichi.png");
-    background_P2_P1kita = load_bitmap_safely("./Asset/P2_P1kita.png");
-    background_P2_P1yamada = load_bitmap_safely("./Asset/P2_P1yamada.png");
-    background_mapchoose = load_bitmap_safely("./Asset/mapchoose.png");
-    speedtool = load_bitmap_safely("./Asset/speedtool.png");
+    icon = load_bitmap_safely("src/icon.png");
+    background1 = load_bitmap_safely("src/Asset/school.jpg");
+    background2 = load_bitmap_safely("src/Asset/home.jpg");
+    background3 = load_bitmap_safely("src/Asset/starry.png");
+    background_menu = load_bitmap_safely("src/Asset/menu.png");
+    background_charchoose = load_bitmap_safely("src/Asset/characterchoose.png");
+    background_charstory = load_bitmap_safely("src/Asset/characterstory.png");
+    background_introduce = load_bitmap_safely("src/Asset/introduce.png");
+    background_pause = load_bitmap_safely("src/Asset/pause.png");
+    background_win = load_bitmap_safely("src/Asset/win.png");
+    background_lose = load_bitmap_safely("src/Asset/lose.png");
+    background_P1_P2 = load_bitmap_safely("src/Asset/P1_P2.png");
+    background_P2_P1 = load_bitmap_safely("src/Asset/P2_P1.png");
+    background_P2_P1bocchi = load_bitmap_safely("src/Asset/P2_P1bocchi.png");
+    background_P2_P1ijichi = load_bitmap_safely("src/Asset/P2_P1ijichi.png");
+    background_P2_P1kita = load_bitmap_safely("src/Asset/P2_P1kita.png");
+    background_P2_P1yamada = load_bitmap_safely("src/Asset/P2_P1yamada.png");
+    background_mapchoose = load_bitmap_safely("src/Asset/mapchoose.png");
+    speedtool = load_bitmap_safely("src/Asset/speedtool.png");
 
-    // *** 將所有地圖物件一次性載入 ***
-    wall_school = load_bitmap_safely("./Asset/table.png");
-    stone_school = load_bitmap_safely("./Asset/chair.png");
-    wall_home = load_bitmap_safely("./Asset/homewall.png");
-    stone_home = load_bitmap_safely("./Asset/homestone.png");
-    wall_starry = load_bitmap_safely("./Asset/starrywall.png");
-    stone_starry = load_bitmap_safely("./Asset/starrystone.png");
+    // *** 將�??�地?�物件�?次性�???***
+    wall_school = load_bitmap_safely("src/Asset/table.png");
+    stone_school = load_bitmap_safely("src/Asset/chair.png");
+    wall_home = load_bitmap_safely("src/Asset/homewall.png");
+    stone_home = load_bitmap_safely("src/Asset/homestone.png");
+    wall_starry = load_bitmap_safely("src/Asset/starrywall.png");
+    stone_starry = load_bitmap_safely("src/Asset/starrystone.png");
 
     // wall = al_load_bitmap("./Asset/table.png");
     // stone = al_load_bitmap("./Asset/chair.png");
@@ -89,9 +89,9 @@ GameWindow::game_init()
     al_reserve_samples(3);
 
 
-    sample = al_load_sample("bocchi_song.mp3");
+    sample = al_load_sample("src/bocchi_song.mp3");
     if (!sample) {
-        fprintf(stderr, "Fatal Error: Failed to load audio sample: bocchi_song.mp3\n");
+        fprintf(stderr, "Fatal Error: Failed to load audio sample: src/bocchi_song.mp3\n");
         show_err_msg(GAME_TERMINATE);
     }
     backgroundSound = al_create_sample_instance(sample);
@@ -118,6 +118,8 @@ GameWindow::game_init()
     bandmemberSet.push_back(new BandMember(IJICHI));
     bandmemberSet.push_back(new BandMember(YAMADA));
     bandmemberSet.push_back(new BandMember(KITA));
+
+    for (int i = 0; i < ALLEGRO_KEY_MAX; i++) key[i] = false;
 }
 
 bool
@@ -182,19 +184,20 @@ GameWindow::GameWindow()
     if (display == NULL || event_queue == NULL)
         show_err_msg(-1);
 
-    al_init_primitives_addon();
+    al_init_image_addon(); // initialize the image addon
     al_init_font_addon(); // initialize the font addon
     al_init_ttf_addon(); // initialize the ttf (True Type Font) addon
-    al_init_image_addon(); // initialize the image addon
+    al_init_primitives_addon();
+
+    al_install_audio();    // install audio event
     al_init_acodec_addon(); // initialize acodec addon
 
     al_install_keyboard(); // install keyboard event
     al_install_mouse();    // install mouse event
-    al_install_audio();    // install audio event
 
-    font = load_font_safely("Caviar_Dreams_Bold.ttf", 12, 0);
-    Medium_font = load_font_safely("Caviar_Dreams_Bold.ttf", 24, 0);
-    Large_font = load_font_safely("Caviar_Dreams_Bold.ttf", 36, 0);
+    font = load_font_safely("src/Caviar_Dreams_Bold.ttf", 12, 0);
+    Medium_font = load_font_safely("src/Caviar_Dreams_Bold.ttf", 24, 0);
+    Large_font = load_font_safely("src/Caviar_Dreams_Bold.ttf", 36, 0);
 
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_keyboard_event_source());
@@ -238,14 +241,29 @@ GameWindow::game_run()
 int
 GameWindow::game_update() 
 {
+    int lw = level->getWidth();
     if (menu->if_gaame_started())
     {
-        update_ai(player3, moving3);
-        update_ai(player4, moving4);
+        // Update Player 1 movement flags based on keys
+        if (key[ALLEGRO_KEY_W]) { bandmemberSet[player1]->changeDir(UP); moving1 = true; }
+        else if (key[ALLEGRO_KEY_S]) { bandmemberSet[player1]->changeDir(DOWN); moving1 = true; }
+        else if (key[ALLEGRO_KEY_A]) { bandmemberSet[player1]->changeDir(LEFT); moving1 = true; }
+        else if (key[ALLEGRO_KEY_D]) { bandmemberSet[player1]->changeDir(RIGHT); moving1 = true; }
+        else { moving1 = false; }
 
-        if (!two_player) {
+        // Update Player 2 movement flags based on keys
+        if (two_player) {
+            if (key[ALLEGRO_KEY_UP]) { bandmemberSet[player2]->changeDir(UP); moving2 = true; }
+            else if (key[ALLEGRO_KEY_DOWN]) { bandmemberSet[player2]->changeDir(DOWN); moving2 = true; }
+            else if (key[ALLEGRO_KEY_LEFT]) { bandmemberSet[player2]->changeDir(LEFT); moving2 = true; }
+            else if (key[ALLEGRO_KEY_RIGHT]) { bandmemberSet[player2]->changeDir(RIGHT); moving2 = true; }
+            else { moving2 = false; }
+        } else {
             update_ai(player2, moving2);
         }
+
+        update_ai(player3, moving3);
+        update_ai(player4, moving4);
 
         menu->Change_Time();
     }
@@ -262,92 +280,65 @@ GameWindow::game_update()
         bombSet[i]->change_counter();
     }
 
-    //test if is legal
-    //player1
-    int dir = bandmemberSet[player1]->getDir();
-    int x_now = bandmemberSet[player1]->getX();
-    int y_now = bandmemberSet[player1]->getY();
-    int x_next = (x_now+axis_x[dir]);
-    int y_next = (y_now+axis_y[dir]);
-
-    int lw = level->getWidth();
-    int target1 = (x_next/grid_width + y_next/grid_height * lw);
-    int target2 = (x_next/grid_width + (y_next+member_width-1)/grid_height * lw);
-    int target3 = ((x_next+member_width-1)/grid_width + y_next/grid_height * lw);
-    int target4 = ((x_next+member_width-1)/grid_width + (y_next+member_width-1)/grid_height * lw);
-        
-    if (level->have_speed(target1) && target1 == target2 && target2 == target3 && target3 == target4) {
-        level->speed_disappear(target1);
-        bandmemberSet[player1]->SpeedChange(2.5);
-    }
-    if (level->is_bombing(target1) || level->is_bombing(target2) || level->is_bombing(target3) || level->is_bombing(target4)) {
-        level->clear_color(player1);
-    } 
-    else if (moving1 && level->isRoad(target1) && level->isRoad(target2) && level->isRoad(target3) && level->isRoad(target4))
+    // player1
+    if (moving1 && can_move(player1, bandmemberSet[player1]->getDir())) {
         bandmemberSet[player1]->Move();
-
-    //player2
-    dir = bandmemberSet[player2]->getDir();
-    x_now = bandmemberSet[player2]->getX();
-    y_now = bandmemberSet[player2]->getY();
-    x_next = (x_now+axis_x[dir]);
-    y_next = (y_now+axis_y[dir]);
-
-    target1 = (x_next/grid_width + y_next/grid_height * 15);
-    target2 = (x_next/grid_width + (y_next+member_width-1)/grid_height * 15);
-    target3 = ((x_next+member_width-1)/grid_width + y_next/grid_height * 15);
-    target4 = ((x_next+member_width-1)/grid_width + (y_next+member_width-1)/grid_height * 15);
         
-    if (level->have_speed(target1) && target1 == target2 && target2 == target3 && target3 == target4) {
-        level->speed_disappear(target1);
-        bandmemberSet[player2]->SpeedChange(2.5);
+        // Speed item check
+        int x = bandmemberSet[player1]->getX();
+        int y = bandmemberSet[player1]->getY();
+        int idx = (y / grid_height) * lw + (x / grid_width);
+        if (level->have_speed(idx)) {
+            level->speed_disappear(idx);
+            bandmemberSet[player1]->SpeedChange(2);
+        }
     }
-    if (level->is_bombing(target1) || level->is_bombing(target2) || level->is_bombing(target3) || level->is_bombing(target4)) {
-        if (two_player)
-            level->clear_color(player1);
-    }
-    else if (moving2 && level->isRoad(target1) && level->isRoad(target2) && level->isRoad(target3) && level->isRoad(target4))
+    // Bombing check
+    int idx1 = (bandmemberSet[player1]->getY() / grid_height) * lw + (bandmemberSet[player1]->getX() / grid_width);
+    if (level->is_bombing(idx1)) level->clear_color(player1);
+
+    // player2
+    if (moving2 && can_move(player2, bandmemberSet[player2]->getDir())) {
         bandmemberSet[player2]->Move();
-
-    //player3
-    dir = bandmemberSet[player3]->getDir();
-    x_now = bandmemberSet[player3]->getX();
-    y_now = bandmemberSet[player3]->getY();
-    x_next = (x_now+axis_x[dir]);
-    y_next = (y_now+axis_y[dir]);
-
-    target1 = (x_next/grid_width + y_next/grid_height * 15);
-    target2 = (x_next/grid_width + (y_next+member_width-1)/grid_height * 15);
-    target3 = ((x_next+member_width-1)/grid_width + y_next/grid_height * 15);
-    target4 = ((x_next+member_width-1)/grid_width + (y_next+member_width-1)/grid_height * 15);
         
-    if (level->have_speed(target1) && target1 == target2 && target2 == target3 && target3 == target4) {
-        level->speed_disappear(target1);
-        bandmemberSet[player3]->SpeedChange(2.5);
+        int x = bandmemberSet[player2]->getX();
+        int y = bandmemberSet[player2]->getY();
+        int idx = (y / grid_height) * lw + (x / grid_width);
+        if (level->have_speed(idx)) {
+            level->speed_disappear(idx);
+            bandmemberSet[player2]->SpeedChange(2);
+        }
     }
-    if (level->is_bombing(target1) || level->is_bombing(target2) || level->is_bombing(target3) || level->is_bombing(target4)) {}        // wait
-    else if (moving3 && level->isRoad(target1) && level->isRoad(target2) && level->isRoad(target3) && level->isRoad(target4))
+    int idx2 = (bandmemberSet[player2]->getY() / grid_height) * lw + (bandmemberSet[player2]->getX() / grid_width);
+    if (level->is_bombing(idx2)) {
+        if (two_player) level->clear_color(player2);
+    }
+
+    // player3 (AI)
+    if (moving3 && can_move(player3, bandmemberSet[player3]->getDir())) {
         bandmemberSet[player3]->Move();
-
-    //player4
-    dir = bandmemberSet[player4]->getDir();
-    x_now = bandmemberSet[player4]->getX();
-    y_now = bandmemberSet[player4]->getY();
-    x_next = (x_now+axis_x[dir]);
-    y_next = (y_now+axis_y[dir]);
-
-    target1 = (x_next/grid_width + y_next/grid_height * 15);
-    target2 = (x_next/grid_width + (y_next+member_width-1)/grid_height * 15);
-    target3 = ((x_next+member_width-1)/grid_width + y_next/grid_height * 15);
-    target4 = ((x_next+member_width-1)/grid_width + (y_next+member_width-1)/grid_height * 15);
         
-    if (level->have_speed(target1) && target1 == target2 && target2 == target3 && target3 == target4) {
-        level->speed_disappear(target1);
-        bandmemberSet[player4]->SpeedChange(2.5);
+        int x = bandmemberSet[player3]->getX();
+        int y = bandmemberSet[player3]->getY();
+        int idx = (y / grid_height) * lw + (x / grid_width);
+        if (level->have_speed(idx)) {
+            level->speed_disappear(idx);
+            bandmemberSet[player3]->SpeedChange(2);
+        }
     }
-    if (level->is_bombing(target1) || level->is_bombing(target2) || level->is_bombing(target3) || level->is_bombing(target4)) {}        // wait
-    else if (moving4 && level->isRoad(target1) && level->isRoad(target2) && level->isRoad(target3) && level->isRoad(target4))
+
+    // player4 (AI)
+    if (moving4 && can_move(player4, bandmemberSet[player4]->getDir())) {
         bandmemberSet[player4]->Move();
+        
+        int x = bandmemberSet[player4]->getX();
+        int y = bandmemberSet[player4]->getY();
+        int idx = (y / grid_height) * lw + (x / grid_width);
+        if (level->have_speed(idx)) {
+            level->speed_disappear(idx);
+            bandmemberSet[player4]->SpeedChange(2);
+        }
+    }
     
 
     return GAME_CONTINUE;
@@ -476,12 +467,18 @@ bool GameWindow::can_move(int player_idx, int dir) {
     int x_next = x_now + speed * axis_x[dir];
     int y_next = y_now + speed * axis_y[dir];
 
-    // Check four corners of the member for collision
+    // Check corners of the member for collision with a small padding for smoother movement
     int lw = level->getWidth();
-    int t1 = (x_next / grid_width + y_next / grid_height * lw);
-    int t2 = (x_next / grid_width + (y_next + member_width - 1) / grid_height * lw);
-    int t3 = ((x_next + member_width - 1) / grid_width + y_next / grid_height * lw);
-    int t4 = ((x_next + member_width - 1) / grid_width + (y_next + member_width - 1) / grid_height * lw);
+    int padding = 6;
+    int x_left = x_next - member_width / 2 + padding;
+    int x_right = x_next + member_width / 2 - 1 - padding;
+    int y_top = y_next - member_width / 2 + padding;
+    int y_bottom = y_next + member_width / 2 - 1 - padding;
+
+    int t1 = (x_left / grid_width + (y_top / grid_height) * lw);
+    int t2 = (x_left / grid_width + (y_bottom / grid_height) * lw);
+    int t3 = (x_right / grid_width + (y_top / grid_height) * lw);
+    int t4 = (x_right / grid_width + (y_bottom / grid_height) * lw);
 
     return (level->isRoad(t1) && level->isRoad(t2) && level->isRoad(t3) && level->isRoad(t4));
 }
@@ -522,7 +519,7 @@ void GameWindow::update_ai(int player_idx, bool &moving_flag) {
         bandmemberSet[player_idx]->changeDir(danger_dir);
         moving_flag = true;
     }
-    else if (force_change || (rand() % 60 == 0)) {
+    else if (force_change || (rand() % 20 == 0)) { // More frequent decisions (1/20 instead of 1/60)
         std::vector<int> valid_dirs;
         for (int d = LEFT; d <= DOWN; d++) {
             if (can_move(player_idx, d)) {
@@ -538,6 +535,7 @@ void GameWindow::update_ai(int player_idx, bool &moving_flag) {
             moving_flag = false;
         }
     } else {
+        // If not blocked and not making a decision, keep moving
         moving_flag = true;
     }
 
@@ -552,7 +550,7 @@ void GameWindow::update_ai(int player_idx, bool &moving_flag) {
 
         // Check adjacent cells for stones
         bool stone_nearby = false;
-        int adj[] = {idx - 1, idx + 1, idx - 15, idx + 15};
+        int adj[] = {idx - 1, idx + 1, idx - level->getWidth(), idx + level->getWidth()};
         for (int i = 0; i < 4; i++) {
             if (level->isStone(adj[i])) {
                 stone_nearby = true;
@@ -672,16 +670,15 @@ GameWindow::process_event()
         return GAME_EXIT;
     }
     else if(event.type == ALLEGRO_EVENT_KEY_DOWN && scene >= GAMESCHOOL && scene <= GAMESTARRY) {
+        key[event.keyboard.keycode] = true;
         Bomb *bomb;
         switch(event.keyboard.keycode) {   
             case ALLEGRO_KEY_P:
-                /*TODO: handle pause event here*/
                 if(al_get_timer_started(timer)) {
                     al_stop_timer(timer);
                     cur_scene = scene;
                     scene = GAMEPAUSE;
                     redraw = true;
-                    // printf("PASS\n");
                 }
                 else{
                     scene = cur_scene;
@@ -695,49 +692,9 @@ GameWindow::process_event()
                 else
                     al_play_sample_instance(backgroundSound);
                 break;
-            case ALLEGRO_KEY_W:
-                bandmemberSet[player1]->changeDir(2);
-                moving1 = true;
-                break;
-            case ALLEGRO_KEY_S:
-                bandmemberSet[player1]->changeDir(3);
-                moving1 = true;
-                break;
-            case ALLEGRO_KEY_A:
-                bandmemberSet[player1]->changeDir(0);
-                moving1 = true;
-                break;
-            case ALLEGRO_KEY_D:
-                bandmemberSet[player1]->changeDir(1);
-                moving1 = true;
-                break;
             case ALLEGRO_KEY_SPACE:
                 bomb = new Bomb(bandmemberSet[player1]->getX(), bandmemberSet[player1]->getY(), BandMemberClass[player1]);
                 bombSet.push_back(bomb);
-                break;
-            case ALLEGRO_KEY_UP:
-                if (two_player) {
-                    bandmemberSet[player2]->changeDir(2);
-                    moving2 = true;
-                }
-                break;
-            case ALLEGRO_KEY_DOWN:
-                if (two_player) {
-                    bandmemberSet[player2]->changeDir(3);
-                    moving2 = true;
-                }
-                break;
-            case ALLEGRO_KEY_LEFT:
-                if (two_player) {
-                    bandmemberSet[player2]->changeDir(0);
-                    moving2 = true;
-                }
-                break;
-            case ALLEGRO_KEY_RIGHT:
-                if (two_player) {
-                    bandmemberSet[player2]->changeDir(1);
-                    moving2 = true;
-                }
                 break;
             case ALLEGRO_KEY_ENTER:
                 if (two_player) {
@@ -748,32 +705,7 @@ GameWindow::process_event()
         }
     }
     else if(event.type == ALLEGRO_EVENT_KEY_UP && scene >= GAMESCHOOL && scene <= GAMESTARRY) {
-        switch(event.keyboard.keycode) {
-            case ALLEGRO_KEY_W:
-                moving1 = false;
-                break;
-            case ALLEGRO_KEY_S:
-                moving1 = false;
-                break;
-            case ALLEGRO_KEY_A:
-                moving1 = false;
-                break;
-            case ALLEGRO_KEY_D:
-                moving1 = false;
-                break;
-            case ALLEGRO_KEY_UP:
-                moving2 = false;
-                break;
-            case ALLEGRO_KEY_DOWN:
-                moving2 = false;
-                break;
-            case ALLEGRO_KEY_LEFT:
-                moving2 = false;
-                break;
-            case ALLEGRO_KEY_RIGHT:
-                moving2 = false;
-                break;
-        }
+        key[event.keyboard.keycode] = false;
     }
     else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(event.mouse.button == 1) {
@@ -1145,38 +1077,38 @@ GameWindow::draw_running_map(int scene)
         {
             int tmp = i * lw + j;
             if(level->isStone(tmp)) {
-                if (current_stone) al_draw_bitmap(current_stone, j*40-20, i*40-20, 0);
+                if (current_stone) al_draw_bitmap(current_stone, j*40, i*40, 0);
             }
             else if(level->isRoad(tmp)) {
                 if (!(level->haveColor(tmp))) {
-                    al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, WHITE);
+                    al_draw_filled_rectangle(j*40, i*40, j*40+40, i*40+40, WHITE);
                 }
                 else {
                     switch (level->get_character(tmp))
                     {
                     case BOCCHI:
-                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, PURPLE);
+                        al_draw_filled_rectangle(j*40, i*40, j*40+40, i*40+40, PURPLE);
                         Score1 += 50 * (player1 == BOCCHI);
                         Score2 += 50 * (player2 == BOCCHI);
                         Score3 += 50 * (player3 == BOCCHI);
                         Score4 += 50 * (player4 == BOCCHI);
                         break;
                     case IJICHI:
-                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, YELLOW);
+                        al_draw_filled_rectangle(j*40, i*40, j*40+40, i*40+40, YELLOW);
                         Score1 += 50 * (player1 == IJICHI);
                         Score2 += 50 * (player2 == IJICHI);
                         Score3 += 50 * (player3 == IJICHI);
                         Score4 += 50 * (player4 == IJICHI);
                         break;
                     case YAMADA:
-                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, BLUE);
+                        al_draw_filled_rectangle(j*40, i*40, j*40+40, i*40+40, BLUE);
                         Score1 += 50 * (player1 == YAMADA);
                         Score2 += 50 * (player2 == YAMADA);
                         Score3 += 50 * (player3 == YAMADA);
                         Score4 += 50 * (player4 == YAMADA);
                         break;
                     case KITA:
-                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, RED);
+                        al_draw_filled_rectangle(j*40, i*40, j*40+40, i*40+40, RED);
                         Score1 += 50 * (player1 == KITA);
                         Score2 += 50 * (player2 == KITA);
                         Score3 += 50 * (player3 == KITA);
@@ -1186,22 +1118,13 @@ GameWindow::draw_running_map(int scene)
                 }
             }
             else {
-                // Inner walls logic
-                bool is_inner_wall = false;
-                if (scene == GAMESCHOOL || scene == GAMEHOME) {
-                    if (i >= 5 && i <= 12 && j >= 3 && j <= 13) is_inner_wall = true;
-                } else if (scene == GAMESTARRY) {
-                    if (i >= 5 && i <= (unsigned int)lh-5 && j >= 3 && j <= (unsigned int)lw-3) is_inner_wall = true;
-                }
-                
-                if (is_inner_wall) {
-                    al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, WHITE);
-                    if (current_wall) al_draw_bitmap(current_wall, j*40-20, i*40-20, 0);
-                }
+                // Any tile that is NOT road and NOT stone is an indestructible WALL
+                al_draw_filled_rectangle(j*40, i*40, j*40+40, i*40+40, WHITE);
+                if (current_wall) al_draw_bitmap(current_wall, j*40, i*40, 0);
             }
 
             if (level->have_speed(tmp)) {
-                al_draw_bitmap(speedtool, j*40-15, i*40-15, 0);
+                al_draw_bitmap(speedtool, j*40+5, i*40+5, 0);
             }
         }
     }
@@ -1281,116 +1204,79 @@ GameWindow::draw_running_map(int scene)
     al_flip_display();
 }
 
-void
-GameWindow::draw_menu() {
-
+void GameWindow::draw_menu() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_menu, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_charchoose() {
-
+void GameWindow::draw_charchoose() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_charchoose, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_charstory() {
-
+void GameWindow::draw_charstory() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_charstory, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_introduce() {
-
+void GameWindow::draw_introduce() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_introduce, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_P1_P2() {
-
+void GameWindow::draw_P1_P2() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_P1_P2, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_P2_P1() {
-
+void GameWindow::draw_P2_P1() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_P2_P1, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_P2_P1bocchi() {
-
+void GameWindow::draw_P2_P1bocchi() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_P2_P1bocchi, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_P2_P1yamada() {
-
+void GameWindow::draw_P2_P1yamada() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_P2_P1yamada, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_P2_P1ijichi() {
-
+void GameWindow::draw_P2_P1ijichi() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_P2_P1ijichi, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_P2_P1kita() {
-
+void GameWindow::draw_P2_P1kita() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_P2_P1kita, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_mapchoose() {
-
+void GameWindow::draw_mapchoose() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_mapchoose, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_pause() {
-
+void GameWindow::draw_pause() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_pause, 0, 0, 0);
-
     al_flip_display();
 }
 
-void
-GameWindow::draw_end() {
+void GameWindow::draw_end() {
     if (menu->win()) {
         al_clear_to_color(al_map_rgb(100, 100, 100));
         al_draw_bitmap(background_win, 0, 0, 0);
@@ -1401,3 +1287,4 @@ GameWindow::draw_end() {
     }
     al_flip_display();
 }
+

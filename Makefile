@@ -1,48 +1,15 @@
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Iallegro/include
-LDFLAGS = -Lallegro/lib -lallegro_monolith
+# Root Makefile proxying to src/Makefile
 
-# Source files
-SRCS = Attack.cpp \
-       BandMember.cpp \
-       Bomb.cpp \
-       Circle.cpp \
-       GameWindow.cpp \
-       global.cpp \
-       Level.cpp \
-       Main.cpp \
-       Menu.cpp \
-       Slider.cpp \
-       Stone.cpp \
-       algif5/src/algif.cpp \
-       algif5/src/bitmap.cpp \
-       algif5/src/gif.cpp \
-       algif5/src/lzw.cpp
+all:
+	@cd src && mingw32-make all
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
-
-# Executable name
-TARGET = Bomberman.exe
-
-# Default target
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Debug target
-debug: CXXFLAGS += -g
-debug: LDFLAGS = -Lallegro/lib -lallegro_monolith-debug
-debug: all
+debug:
+	@cd src && mingw32-make debug
 
 clean:
-	del /f $(subst /,\,$(OBJS)) $(TARGET)
+	@cd src && mingw32-make clean
 
-run: all
-	./$(TARGET)
+run:
+	@cd src && mingw32-make run
 
-.PHONY: all clean run debug
+.PHONY: all debug clean run

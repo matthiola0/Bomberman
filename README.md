@@ -45,15 +45,15 @@ Within the time limit, use bomb explosions to color as many floor tiles as possi
 
 ### Screenshots
 
-![Screenshot 1](images/image1.png)
-![Screenshot 2](images/image2.png)
-![Screenshot 3](images/image3.png)
-![Screenshot 4](images/image4.png)
+![Screenshot 1](src/images/image1.png)
+![Screenshot 2](src/images/image2.png)
+![Screenshot 3](src/images/image3.png)
+![Screenshot 4](src/images/image4.png)
 
 
 ### Gameplay Video
 
-click to open vedio
+click to open video
 [![Watch the demo](https://img.youtube.com/vi/plwuGUrNsGw/0.jpg)](https://www.youtube.com/watch?v=plwuGUrNsGw)
 
 
@@ -63,22 +63,35 @@ click to open vedio
 
 This project uses the Allegro 5 library. Please ensure you have a C++ compiler (e.g., GCC/G++) and MinGW (mingw32-make) installed.
 
-### Option 1: Using VS Code (Recommended)
-1. Open the project folder in VS Code.
-2. Press **F5** to compile and run the game automatically (using the provided `.vscode` configurations).
+### Project Structure
+* **`src/`**: Contains all source code (`.cpp`, `.h`), assets, and level configurations.
+* **`allegro/`**: Allegro 5 library files (headers and libraries).
+* **`Bomberman.exe`**: Generated the root directory.
 
-### Option 2: Using Command Line
-1. Open a terminal in the project folder.
-2. Run the following command to compile:
+### Build Instructions
+
+#### Option 1: Using Command Line
+1. Open a terminal in the project root folder.
+2. Enter the `src` directory:
+   ```bash
+   cd src
+   ```
+3. Run the following command to compile:
    ```bash
    mingw32-make
    ```
-3. Run the game:
+4. Find the generated `Bomberman.exe` in the root directory.
+5. Return to the root directory and run the game:
    ```bash
+   cd ..
    ./Bomberman.exe
    ```
 
-If you encounter any issues during installation or compilation, refer to the included guide: `tutorial/Allegro_install_i2p2.pdf`.
+#### Option 2: Using VS Code
+1. Open the project folder in VS Code.
+2. Press **F5** to compile and run the game automatically (using the provided `.vscode` configurations which point to `src/Makefile`).
+
+If you encounter any issues during installation or compilation, refer to the included guide: `src/tutorial/Allegro_install_i2p2.pdf`.
 
 ---
 

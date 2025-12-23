@@ -98,7 +98,7 @@ public:
     bool initial = true;
 
 private:
-    ALLEGRO_BITMAP *icon;
+    ALLEGRO_BITMAP *icon = NULL;
     // ALLEGRO_BITMAP *tower[Num_TowerType];
     ALLEGRO_BITMAP *background1 = NULL;
     ALLEGRO_BITMAP *background2 = NULL;
@@ -122,12 +122,12 @@ private:
     // ALLEGRO_BITMAP *wall = NULL;
     // ALLEGRO_BITMAP *stone = NULL;
 
-    ALLEGRO_BITMAP *wall_school;
-    ALLEGRO_BITMAP *stone_school;
-    ALLEGRO_BITMAP *wall_home;
-    ALLEGRO_BITMAP *stone_home;
-    ALLEGRO_BITMAP *wall_starry;
-    ALLEGRO_BITMAP *stone_starry;
+    ALLEGRO_BITMAP *wall_school = NULL;
+    ALLEGRO_BITMAP *stone_school = NULL;
+    ALLEGRO_BITMAP *wall_home = NULL;
+    ALLEGRO_BITMAP *stone_home = NULL;
+    ALLEGRO_BITMAP *wall_starry = NULL;
+    ALLEGRO_BITMAP *stone_starry = NULL;
 
     ALLEGRO_BITMAP* load_bitmap_safely(const char* path);
     ALLEGRO_FONT* load_font_safely(const char* path, int size, int flags);
@@ -189,6 +189,7 @@ private:
 
     int cur_scene;
     int scene;
+    bool key[ALLEGRO_KEY_MAX];
 };
 
 

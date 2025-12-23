@@ -3,8 +3,8 @@
 Bomb::Bomb(int x, int y, char* buffer) 
 {
     circle = new Circle;
-    circle->x = (int)((x+grid_width/2)/grid_width) * grid_width;
-    circle->y = (int)((y+grid_height/2)/grid_height) * grid_height;
+    circle->x = (int)(x / grid_width) * grid_width + grid_width / 2;
+    circle->y = (int)(y / grid_height) * grid_height + grid_height / 2;
     circle->r = grid_width/2;
     counter = 0;
 
@@ -27,7 +27,7 @@ Bomb::Load(char* name)
 {
     char buffer[50];
 
-    sprintf(buffer, "./Asset/%s_bomb.png", name);
+    sprintf(buffer, "src/Asset/%s_bomb.png", name);
 
     if (!strcmp(name, "bocchi")) 
         character = BOCCHI;
@@ -40,10 +40,10 @@ Bomb::Load(char* name)
 
 
     img = al_load_bitmap(buffer);
-    img_left = al_load_bitmap("./Asset/fire_left.png");
-    img_right = al_load_bitmap("./Asset/fire_right.png");
-    img_up = al_load_bitmap("./Asset/fire_up.png");
-    img_down = al_load_bitmap("./Asset/fire_down.png");
+    img_left = al_load_bitmap("src/Asset/fire_left.png");
+    img_right = al_load_bitmap("src/Asset/fire_right.png");
+    img_up = al_load_bitmap("src/Asset/fire_up.png");
+    img_down = al_load_bitmap("src/Asset/fire_down.png");
 }
 
 void

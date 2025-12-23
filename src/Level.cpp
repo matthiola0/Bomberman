@@ -31,7 +31,7 @@ LEVEL::setLevel(const int level)
     char buffer[50];
     FILE *file;
 
-    sprintf(buffer, "LEVEL%d.txt", level);
+    sprintf(buffer, "src/LEVEL%d.txt", level);
     file = fopen(buffer, "r");
     if (!file) {
         fprintf(stderr, "Error: Could not open level file %s\n", buffer);
