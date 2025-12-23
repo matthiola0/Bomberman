@@ -39,6 +39,13 @@ LEVEL::setLevel(const int level)
     }
 
     this->level = level;
+    if (level == 3) {
+        width = 25;
+        height = 25;
+    } else {
+        width = 15;
+        height = 15;
+    }
     
     for(int i = 0; i < NumOfGrid; i++)
     {

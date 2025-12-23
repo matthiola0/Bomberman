@@ -89,7 +89,7 @@ public:
     // detect if a bandmember will be on road
     bool can_move(int player_idx, int dir);
     void update_ai(int player_idx, bool &moving_flag);
-
+    void enter_game(int map_id);
     // Tower* create_tower(int);
     // Monster* create_monster();
     // BandMember* create_bandmember();
@@ -167,10 +167,9 @@ private:
 
     int player1;
     int player2;    // player or computer
-    int player3;    // computer
-    int player4;    // computer
-
+    int player3, player4;
     bool two_player = true;
+    int cam_x, cam_y;
 
     std::vector<Bomb*> bombSet;
 

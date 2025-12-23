@@ -82,6 +82,8 @@ public:
 
     // int getMonsterSpeed() { return MonsterSpeed; }
     int getLevel() { return level; }
+    int getWidth() { return width; }
+    int getHeight() { return height; }
     //void search_destination();
     // std::vector<int> ReturnPath() { return road_grid; }
 
@@ -92,6 +94,8 @@ private:
     // std::vector<int> road_grid;
     // current level number
     int level = 1;
+    int width = 15;
+    int height = 15;
     // maximum number of monster of a level
     // int Monster_MAX = 50;
     // frequency of producing  monster

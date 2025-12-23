@@ -13,9 +13,9 @@
 #define field_width 600
 #define field_height 600
 
-#define Num_TowerType 0
-#define Num_MonsterType 0
-#define NumOfGrid (field_width / grid_width) * (field_height / grid_height)
+#define MAX_GRIDS_X 30
+#define MAX_GRIDS_Y 30
+#define NumOfGrid (MAX_GRIDS_X * MAX_GRIDS_Y)
 #define Num_BandMemberType 4
 
 extern int TowerRadius[];

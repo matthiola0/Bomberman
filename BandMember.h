@@ -19,7 +19,7 @@ public:
     BandMember(int);
     virtual ~BandMember();
 
-    void Reset();
+    void Reset(int lw = 15);
     // Draw image per frame
     // override virtual function "Object::Draw"
     void Draw();
@@ -44,6 +44,7 @@ public:
         speed_counter = 60 * 5; 
         speed = S; 
     }
+    void setSCounter(int x) { speed_counter = x; }
     int getSCounter() { return speed_counter; }
     
     void changeDir(int);

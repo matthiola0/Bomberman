@@ -270,10 +270,11 @@ GameWindow::game_update()
     int x_next = (x_now+axis_x[dir]);
     int y_next = (y_now+axis_y[dir]);
 
-    int target1 = (x_next/grid_width + y_next/grid_height * 15);
-    int target2 = (x_next/grid_width + (y_next+member_width-1)/grid_height * 15);
-    int target3 = ((x_next+member_width-1)/grid_width + y_next/grid_height * 15);
-    int target4 = ((x_next+member_width-1)/grid_width + (y_next+member_width-1)/grid_height * 15);
+    int lw = level->getWidth();
+    int target1 = (x_next/grid_width + y_next/grid_height * lw);
+    int target2 = (x_next/grid_width + (y_next+member_width-1)/grid_height * lw);
+    int target3 = ((x_next+member_width-1)/grid_width + y_next/grid_height * lw);
+    int target4 = ((x_next+member_width-1)/grid_width + (y_next+member_width-1)/grid_height * lw);
         
     if (level->have_speed(target1) && target1 == target2 && target2 == target3 && target3 == target4) {
         level->speed_disappear(target1);
@@ -443,6 +444,28 @@ GameWindow::game_destroy()
     delete menu;
 }
 
+void GameWindow::enter_game(int map_id) {
+    game_reset();
+    level->setLevel(map_id);
+    
+    // Reset players again after setLevel potentially cleared something or changed layout
+    int lw = level->getWidth();
+    for (int it = 0; it < (int)bandmemberSet.size(); it++) {
+        if (bandmemberSet[it]) bandmemberSet[it]->Reset(lw);
+    }
+    
+    moving1 = moving2 = moving3 = moving4 = false;
+    
+    if (map_id == 1) scene = GAMESCHOOL;
+    else if (map_id == 2) scene = GAMEHOME;
+    else if (map_id == 3) scene = GAMESTARRY;
+    
+    menu->set_game_started(true);
+    // Background sound and timer moved from MAPCHOOSE to match start
+    if (!mute) al_play_sample_instance(backgroundSound);
+    al_start_timer(timer);
+}
+
 bool GameWindow::can_move(int player_idx, int dir) {
     if (bandmemberSet.empty() || player_idx < 0 || player_idx >= (int)bandmemberSet.size()) return false;
     if (!bandmemberSet[player_idx]) return false;
@@ -454,10 +477,11 @@ bool GameWindow::can_move(int player_idx, int dir) {
     int y_next = y_now + speed * axis_y[dir];
 
     // Check four corners of the member for collision
-    int t1 = (x_next / grid_width + y_next / grid_height * 15);
-    int t2 = (x_next / grid_width + (y_next + member_width - 1) / grid_height * 15);
-    int t3 = ((x_next + member_width - 1) / grid_width + y_next / grid_height * 15);
-    int t4 = ((x_next + member_width - 1) / grid_width + (y_next + member_width - 1) / grid_height * 15);
+    int lw = level->getWidth();
+    int t1 = (x_next / grid_width + y_next / grid_height * lw);
+    int t2 = (x_next / grid_width + (y_next + member_width - 1) / grid_height * lw);
+    int t3 = ((x_next + member_width - 1) / grid_width + y_next / grid_height * lw);
+    int t4 = ((x_next + member_width - 1) / grid_width + (y_next + member_width - 1) / grid_height * lw);
 
     return (level->isRoad(t1) && level->isRoad(t2) && level->isRoad(t3) && level->isRoad(t4));
 }
@@ -524,7 +548,7 @@ void GameWindow::update_ai(int player_idx, bool &moving_flag) {
         int y = bandmemberSet[player_idx]->getY();
         int grid_x = (x + grid_width / 2) / grid_width;
         int grid_y = (y + grid_height / 2) / grid_height;
-        int idx = grid_y * 15 + grid_x;
+        int idx = grid_y * level->getWidth() + grid_x;
 
         // Check adjacent cells for stones
         bool stone_nearby = false;
@@ -954,49 +978,15 @@ GameWindow::process_event()
                     break;
                 case MAPCHOOSE:
                     if(mouse_hover(0,0,800,200)) {
-                        menu->Reset();
-                        for (int it = BOCCHI; it <= KITA; it++) {
-                            bandmemberSet[it]->Reset();
-                        }
-                        moving1 = false;
-                        moving2 = false;
-                        moving3 = false;
-                        moving4 = false;
-                        level->Reset(1);
-                        menu->set_game_started(true);
-                        al_start_timer(timer);
-                        scene = GAMESCHOOL;
+                        enter_game(1);
                     }
                     else if(mouse_hover(0,200,800,200)) {
-                        menu->Reset();
-                        for (int it = BOCCHI; it <= KITA; it++) {
-                            if (it < (int)bandmemberSet.size() && bandmemberSet[it])
-                                bandmemberSet[it]->Reset();
-                        }
-                        moving1 = false;
-                        moving2 = false;
-                        moving3 = false;
-                        moving4 = false;
-                        level->Reset(2);
-                        menu->set_game_started(true);
-                        al_start_timer(timer);
-                        scene = GAMEHOME;
+                        enter_game(2);
                     }
                     else if(mouse_hover(0,400,800,200)) {
-                        menu->Reset();
-                        for (int it = BOCCHI; it <= KITA; it++) {
-                            if (it < (int)bandmemberSet.size() && bandmemberSet[it])
-                                bandmemberSet[it]->Reset();
-                        }
-                        moving1 = false;
-                        moving2 = false;
-                        moving3 = false;
-                        moving4 = false;
-                        level->Reset(3);
-                        menu->set_game_started(true);
-                        al_start_timer(timer);
-                        scene = GAMESTARRY;
+                        enter_game(3);
                     }
+                    break;
                 case GAMEEND:
                     if (mouse_hover(0, 540,  188-0, 580-540)) {
                         scene = MENU;
@@ -1101,146 +1091,121 @@ GameWindow::draw_running_map(int scene)
     
     al_clear_to_color(al_map_rgb(100, 100, 100));
 
-    // --- DEBUG START ---
-    // fprintf(stderr, "DEBUG: In draw_running_map for scene %d.\n", scene);
+    // Update camera position
+    if (bandmemberSet.empty() || player1 < 0 || player1 >= (int)bandmemberSet.size() || !bandmemberSet[player1]) return;
+
+    int px = bandmemberSet[player1]->getX();
+    int py = bandmemberSet[player1]->getY();
+    int lw = level->getWidth();
+    int lh = level->getHeight();
+    int map_w = lw * grid_width;
+    int map_h = lh * grid_height;
+
+    cam_x = px - field_width / 2;
+    cam_y = py - field_height / 2;
+
+    if (cam_x < 0) cam_x = 0;
+    if (cam_y < 0) cam_y = 0;
+    if (cam_x > map_w - field_width) cam_x = map_w - field_width;
+    if (cam_y > map_h - field_height) cam_y = map_h - field_height;
+    
+    // For small maps (L1/L2), center the map or keep layout fixed
+    if (map_w <= field_width) cam_x = (map_w - field_width) / 2;
+    if (map_h <= field_height) cam_y = (map_h - field_height) / 2;
+
+    ALLEGRO_TRANSFORM trans;
+    al_identity_transform(&trans);
+    al_translate_transform(&trans, -cam_x, -cam_y);
+    al_use_transform(&trans);
 
     switch (scene) {
         case GAMESCHOOL:
-            // fprintf(stderr, "DEBUG: Attempting to draw 'background1'.\n");
             al_draw_bitmap(background1, 0, 0, 0);
-            // fprintf(stderr, "DEBUG: OK.\n");
             current_wall = wall_school;
             current_stone = stone_school;
             break;
         case GAMEHOME:
-            // fprintf(stderr, "DEBUG: Attempting to draw 'background2'.\n");
             al_draw_bitmap(background2, 0, 0, 0);
-            // fprintf(stderr, "DEBUG: OK.\n");
             current_wall = wall_home;
             current_stone = stone_home;
             break;
         case GAMESTARRY:
-            // fprintf(stderr, "DEBUG: Attempting to draw 'background3'.\n");
             al_draw_bitmap(background3, 0, 0, 0);
-            // fprintf(stderr, "DEBUG: OK.\n");
             current_wall = wall_starry;
             current_stone = stone_starry;
             break;
     }
 
     int Score1 = 0, Score2 = 0, Score3 = 0, Score4 = 0;
+
     // draw map
-    for(i = 0; i < field_height/40; i++)
+    for(i = 0; i < (unsigned int)lh; i++)
     {
-        for(j = 0; j < field_width/40; j++)
+        for(j = 0; j < (unsigned int)lw; j++)
         {
-            // char buffer[50];
-            int tmp = i*15+j;
-            // sprintf(buffer, "%d", tmp);
+            int tmp = i * lw + j;
             if(level->isStone(tmp)) {
-                // fprintf(stderr, "DEBUG: Attempting to draw 'stone' at %d,%d.\n", j, i);
                 if (current_stone) al_draw_bitmap(current_stone, j*40-20, i*40-20, 0);
-                // fprintf(stderr, "DEBUG: OK.\n");
             }
-            else if(level->isRoad(i*15 + j)) {
+            else if(level->isRoad(tmp)) {
                 if (!(level->haveColor(tmp))) {
                     al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, WHITE);
                 }
                 else {
                     switch (level->get_character(tmp))
                     {
-                        case BOCCHI:
-                            Score1 += 50 * (player1 == BOCCHI);
-                            Score2 += 50 * (player2 == BOCCHI);
-                            Score3 += 50 * (player3 == BOCCHI);
-                            Score4 += 50 * (player4 == BOCCHI);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, PURPLE);
-                            break;
-                        case IJICHI:
-                            Score1 += 50 * (player1 == IJICHI);
-                            Score2 += 50 * (player2 == IJICHI);
-                            Score3 += 50 * (player3 == IJICHI);
-                            Score4 += 50 * (player4 == IJICHI);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, YELLOW);
-                            break;
-                        case YAMADA:
-                            Score1 += 50 * (player1 == YAMADA);
-                            Score2 += 50 * (player2 == YAMADA);
-                            Score3 += 50 * (player3 == YAMADA);
-                            Score4 += 50 * (player4 == YAMADA);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, BLUE);
-                            break;
-                        case KITA:
-                            Score1 += 50 * (player1 == KITA);
-                            Score2 += 50 * (player2 == KITA);
-                            Score3 += 50 * (player3 == KITA);
-                            Score4 += 50 * (player4 == KITA);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, RED);
-                            break;
-                        default:
-                            //std::cout << tmp << ' ' << level->get_character(tmp) << std::endl;
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, BLACK);
-                            break;
+                    case BOCCHI:
+                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, PURPLE);
+                        Score1 += 50 * (player1 == BOCCHI);
+                        Score2 += 50 * (player2 == BOCCHI);
+                        Score3 += 50 * (player3 == BOCCHI);
+                        Score4 += 50 * (player4 == BOCCHI);
+                        break;
+                    case IJICHI:
+                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, YELLOW);
+                        Score1 += 50 * (player1 == IJICHI);
+                        Score2 += 50 * (player2 == IJICHI);
+                        Score3 += 50 * (player3 == IJICHI);
+                        Score4 += 50 * (player4 == IJICHI);
+                        break;
+                    case YAMADA:
+                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, BLUE);
+                        Score1 += 50 * (player1 == YAMADA);
+                        Score2 += 50 * (player2 == YAMADA);
+                        Score3 += 50 * (player3 == YAMADA);
+                        Score4 += 50 * (player4 == YAMADA);
+                        break;
+                    case KITA:
+                        al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, RED);
+                        Score1 += 50 * (player1 == KITA);
+                        Score2 += 50 * (player2 == KITA);
+                        Score3 += 50 * (player3 == KITA);
+                        Score4 += 50 * (player4 == KITA);
+                        break;
                     }
                 }
             }
-            else if(i >= 6 && i <= 11 && j >= 4 && j <= 12) {
-                if (!(level->haveColor(tmp))) {
+            else {
+                // Inner walls logic
+                bool is_inner_wall = false;
+                if (scene == GAMESCHOOL || scene == GAMEHOME) {
+                    if (i >= 5 && i <= 12 && j >= 3 && j <= 13) is_inner_wall = true;
+                } else if (scene == GAMESTARRY) {
+                    if (i >= 5 && i <= (unsigned int)lh-5 && j >= 3 && j <= (unsigned int)lw-3) is_inner_wall = true;
+                }
+                
+                if (is_inner_wall) {
                     al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, WHITE);
+                    if (current_wall) al_draw_bitmap(current_wall, j*40-20, i*40-20, 0);
                 }
-                else {
-                    switch (level->get_character(tmp))
-                    {
-                        case BOCCHI:
-                            Score1 += 200 * (player1 == BOCCHI);
-                            Score2 += 200 * (player2 == BOCCHI);
-                            Score3 += 200 * (player3 == BOCCHI);
-                            Score4 += 200 * (player4 == BOCCHI);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, PURPLE);
-                            break;
-                        case IJICHI:
-                            Score1 += 200 * (player1 == IJICHI);
-                            Score2 += 200 * (player2 == IJICHI);
-                            Score3 += 200 * (player3 == IJICHI);
-                            Score4 += 200 * (player4 == IJICHI);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, YELLOW);
-                            break;
-                        case YAMADA:
-                            Score1 += 200 * (player1 == YAMADA);
-                            Score2 += 200 * (player2 == YAMADA);
-                            Score3 += 200 * (player3 == YAMADA);
-                            Score4 += 200 * (player4 == YAMADA);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, BLUE);
-                            break;
-                        case KITA:
-                            Score1 += 200 * (player1 == KITA);
-                            Score2 += 200 * (player2 == KITA);
-                            Score3 += 200 * (player3 == KITA);
-                            Score4 += 200 * (player4 == KITA);
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, RED);
-                            break;
-                        default:
-                            al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, BLACK);
-                            break;
-                    }
-                }
-                if (current_wall) al_draw_bitmap(current_wall, j*40-20, i*40-20, 0);
-            }
-            else if (i >= 5 && i <= 12 && j >= 3 && j <= 13) {
-                al_draw_filled_rectangle(j*40-20, i*40-20, j*40+20, i*40+20, WHITE);
-                // fprintf(stderr, "DEBUG: Attempting to draw 'wall' at %d,%d.\n", j, i);
-                if (current_wall) al_draw_bitmap(current_wall, j*40-20, i*40-20, 0);
-                // fprintf(stderr, "DEBUG: OK.\n");
             }
 
             if (level->have_speed(tmp)) {
-                // fprintf(stderr, "DEBUG: Attempting to draw 'speedtool'.\n");
                 al_draw_bitmap(speedtool, j*40-15, i*40-15, 0);
-                // fprintf(stderr, "DEBUG: OK.\n");
             }
-            // al_draw_text(font, al_map_rgb(0, 0, 0), j*40, i*40, ALLEGRO_ALIGN_CENTER, buffer);   // debug
         }
     }
+    
     // renew Score in menu
     menu->Renew_Score1(Score1);
     menu->Renew_Score2(Score2);
@@ -1248,91 +1213,72 @@ GameWindow::draw_running_map(int scene)
     menu->Renew_Score4(Score4);
 
     // draw bandmember
-    // fprintf(stderr, "DEBUG: Drawing game objects now...\n");
-    for (int i = 0; i < (int)bandmemberSet.size(); i++) 
+    for (int k = 0; k < (int)bandmemberSet.size(); k++) 
     {
-        if (bandmemberSet[i]) bandmemberSet[i]->Draw();
+        if (bandmemberSet[k]) bandmemberSet[k]->Draw();
     }
 
     // draw bomb && fire
-    std::vector<Bomb*>::iterator it;
-    for(it=bombSet.begin(); it!=bombSet.end();)          
+    std::vector<Bomb*>::iterator bit;
+    for(bit=bombSet.begin(); bit!=bombSet.end();)          
     {
-        // fprintf(stderr, "DEBUG: Processing a bomb object.\n");
-        if ((*it)->get_counter() <= 135) {
-            // fprintf(stderr, "DEBUG: Attempting to call Draw() for a Bomb.\n");
-            (*it)->Draw();
-            // fprintf(stderr, "DEBUG: OK.\n");
-            it++;
+        if ((*bit)->get_counter() <= 135) {
+            (*bit)->Draw();
+            bit++;
         }
-        else if ((*it)->get_counter() <= 190) {
+        else if ((*bit)->get_counter() <= 190) {
             bool DIR[5];
-            int now_x = (*it)->getX(), now_y = (*it)->getY();
+            int now_x = (*bit)->getX(), now_y = (*bit)->getY();
             int next_x, next_y;
             int idx;
             for (unsigned dir = LEFT; dir <= DOWN; dir++) {
                 next_x = now_x + axis_x[dir]*grid_width;
                 next_y = now_y + axis_y[dir]*grid_height;
-                idx = (next_y * 15 + next_x)/40;
+                idx = (next_y / grid_height * lw) + (next_x / grid_width);
                 level->bomb_yes(idx);
                 if (level->isRoad(idx) || level->isStone(idx))
                     DIR[dir] = true;
                 else
                     DIR[dir] = false;
             }
-            (*it)->DrawFire(DIR[LEFT], DIR[RIGHT], DIR[UP], DIR[DOWN]);
-            // fprintf(stderr, "DEBUG: OK.\n");
-            it++;
+            (*bit)->DrawFire(DIR[LEFT], DIR[RIGHT], DIR[UP], DIR[DOWN]);
+            bit++;
         }
         else {
-            int idx_cur = ((*it)->getY() * 15 + (*it)->getX())/40;
+            int idx_cur = ((*bit)->getY() / grid_height * lw) + ((*bit)->getX() / grid_width);
             int idx_left = idx_cur - 1;
             int idx_right = idx_cur + 1;
-            int idx_up = idx_cur - 15;
-            int idx_down = idx_cur + 15;
-            if(level->isStone(idx_left)) {
-                level->stone_bomb(idx_left);
-                level->speed_emerge(idx_left);
-            }
-            if(level->isStone(idx_right)) {
-                level->stone_bomb(idx_right);
-                level->speed_emerge(idx_right);
-            }
-            if(level->isStone(idx_down)) {
-                level->stone_bomb(idx_down);
-                level->speed_emerge(idx_down);
-            }
-            if(level->isStone(idx_up)) {
-                level->stone_bomb(idx_up);
-                level->speed_emerge(idx_up);
-            }
+            int idx_up = idx_cur - lw;
+            int idx_down = idx_cur + lw;
             
-            level->change_character(idx_cur, (*it)->get_character());
-            level->change_character(idx_left, (*it)->get_character());
-            level->change_character(idx_right, (*it)->get_character());
-            level->change_character(idx_down, (*it)->get_character());
-            level->change_character(idx_up, (*it)->get_character());
+            if(level->isStone(idx_left)) { level->stone_bomb(idx_left); level->speed_emerge(idx_left); }
+            if(level->isStone(idx_right)) { level->stone_bomb(idx_right); level->speed_emerge(idx_right); }
+            if(level->isStone(idx_down)) { level->stone_bomb(idx_down); level->speed_emerge(idx_down); }
+            if(level->isStone(idx_up)) { level->stone_bomb(idx_up); level->speed_emerge(idx_up); }
+            
+            level->change_character(idx_cur, (*bit)->get_character());
+            level->change_character(idx_left, (*bit)->get_character());
+            level->change_character(idx_right, (*bit)->get_character());
+            level->change_character(idx_down, (*bit)->get_character());
+            level->change_character(idx_up, (*bit)->get_character());
 
             level->bomb_not(idx_left);
             level->bomb_not(idx_right);
             level->bomb_not(idx_down);
             level->bomb_not(idx_up);
             
-        
-            delete (*it);
-            it = bombSet.erase(it);
+            delete (*bit);
+            bit = bombSet.erase(bit);
         }
     }
 
+    al_identity_transform(&trans);
+    al_use_transform(&trans);
+
     al_draw_filled_rectangle(field_width, 0, window_width, window_height, al_map_rgb(100, 100, 100));
-    
-    // fprintf(stderr, "DEBUG: Attempting to call Draw() for Menu (HUD).\n");
     menu->Draw();
-    // fprintf(stderr, "DEBUG: OK.\n");
 
     al_flip_display();
-    // fprintf(stderr, "DEBUG: draw_running_map finished one frame successfully.\n");
-
 }
 
 void

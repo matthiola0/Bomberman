@@ -38,9 +38,8 @@ BandMember::BandMember(int _character)
     speed = 1;
     speed_counter = 0;
     circle = new Circle;
-    circle->x = (init_pos % 15) * grid_width;
-    circle->y = (init_pos / 15) * grid_height;
     circle->r = member_width / 2;
+    Reset(15); // Default to 15x15 layout
 }
 
 BandMember::~BandMember()
@@ -52,18 +51,28 @@ BandMember::~BandMember()
 }
 
 void 
-BandMember::Reset() {
+BandMember::Reset(int lw) {
     direction = RIGHT;
-    switch (character) {
-        case BOCCHI: init_pos = 94; break;
-        case IJICHI: init_pos = 102; break;
-        case YAMADA: init_pos = 169; break;
-        case KITA: init_pos = 177; break;
+    int col = 0, row = 0;
+    if (lw == 25) {
+        switch (character) {
+            case BOCCHI: col = 2; row = 2; break;
+            case IJICHI: col = 22; row = 2; break;
+            case YAMADA: col = 2; row = 22; break;
+            case KITA: col = 22; row = 22; break;
+        }
+    } else {
+        switch (character) {
+            case BOCCHI: col = 4; row = 6; break;
+            case IJICHI: col = 12; row = 6; break;
+            case YAMADA: col = 4; row = 11; break;
+            case KITA: col = 12; row = 11; break;
+        }
     }
     speed = 1;
     speed_counter = 0;
-    circle->x = (init_pos % 15) * grid_width;
-    circle->y = (init_pos / 15) * grid_height;
+    circle->x = col * grid_width + grid_width/2;
+    circle->y = row * grid_height + grid_height/2;
 }
 
 bool
