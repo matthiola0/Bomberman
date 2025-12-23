@@ -238,62 +238,11 @@ GameWindow::game_update()
 {
     if (menu->if_gaame_started())
     {
-        // fprintf(stderr, "DEBUG: Game has started, updating time. Current Time = %d\n", menu->getTime());
-
-        int randomNum = rand() % 320;
-        if (randomNum == 0) {
-            bandmemberSet[player3]->changeDir(2); // move up
-            moving3 = true;
-        } else if (randomNum == 1) {
-            bandmemberSet[player3]->changeDir(3); // move down
-            moving3 = true;
-        } else if (randomNum == 2) {
-            bandmemberSet[player3]->changeDir(0); // move left
-            moving3 = true;
-        } else if (randomNum == 3) {
-            bandmemberSet[player3]->changeDir(1); // move right
-        }
-        else if (randomNum == 4) {
-            Bomb* bomb = new Bomb(bandmemberSet[player3]->getX(), bandmemberSet[player3]->getY(), BandMemberClass[player3]);
-            bombSet.push_back(bomb);
-        }
-
-        randomNum = rand() % 320;
-        if (randomNum == 0) {
-            bandmemberSet[player4]->changeDir(2); // move up
-            moving4 = true;
-        } else if (randomNum == 1) {
-            bandmemberSet[player4]->changeDir(3); // move down
-            moving4 = true;
-        } else if (randomNum == 2) {
-            bandmemberSet[player4]->changeDir(0); // move left
-            moving4 = true;
-        } else if (randomNum == 3) {
-            bandmemberSet[player4]->changeDir(1); // move right
-        }
-        else if (randomNum == 4) {
-            Bomb* bomb = new Bomb(bandmemberSet[player4]->getX(), bandmemberSet[player4]->getY(), BandMemberClass[player4]);
-            bombSet.push_back(bomb);
-        }
+        update_ai(player3, moving3);
+        update_ai(player4, moving4);
 
         if (!two_player) {
-            randomNum = rand() % 320;
-            if (randomNum == 0) {
-                bandmemberSet[player2]->changeDir(2); // move up
-                moving2 = true;
-            } else if (randomNum == 1) {
-                bandmemberSet[player2]->changeDir(3); // move down
-                moving2 = true;
-            } else if (randomNum == 2) {
-                bandmemberSet[player2]->changeDir(0); // move left
-                moving2 = true;
-            } else if (randomNum == 3) {
-                bandmemberSet[player2]->changeDir(1); // move right
-            }
-            else if (randomNum == 4) {
-                Bomb* bomb = new Bomb(bandmemberSet[player2]->getX(), bandmemberSet[player2]->getY(), BandMemberClass[player2]);
-                bombSet.push_back(bomb);
-            }
+            update_ai(player2, moving2);
         }
 
         menu->Change_Time();
@@ -490,6 +439,111 @@ GameWindow::game_destroy()
 
     delete level;
     delete menu;
+}
+
+bool GameWindow::can_move(int player_idx, int dir) {
+    int x_now = bandmemberSet[player_idx]->getX();
+    int y_now = bandmemberSet[player_idx]->getY();
+    int speed = 3; // Use a slightly larger step for better collision detection
+    int x_next = x_now + speed * axis_x[dir];
+    int y_next = y_now + speed * axis_y[dir];
+
+    // Check four corners of the member for collision
+    int t1 = (x_next / grid_width + y_next / grid_height * 15);
+    int t2 = (x_next / grid_width + (y_next + member_width - 1) / grid_height * 15);
+    int t3 = ((x_next + member_width - 1) / grid_width + y_next / grid_height * 15);
+    int t4 = ((x_next + member_width - 1) / grid_width + (y_next + member_width - 1) / grid_height * 15);
+
+    return (level->isRoad(t1) && level->isRoad(t2) && level->isRoad(t3) && level->isRoad(t4));
+}
+
+void GameWindow::update_ai(int player_idx, bool &moving_flag) {
+    int current_dir = bandmemberSet[player_idx]->getDir();
+    
+    // 1. Check for nearby danger (bombs about to explode)
+    int ai_x = bandmemberSet[player_idx]->getX();
+    int ai_y = bandmemberSet[player_idx]->getY();
+    int danger_dir = -1;
+    float min_dist = 999999;
+
+    for (auto b : bombSet) {
+        if (b->get_counter() > 60) { // Bomb is dangerous after 1 second
+            float dx = b->getX() - ai_x;
+            float dy = b->getY() - ai_y;
+            float d = dx*dx + dy*dy;
+            if (d < 3 * grid_width * grid_width) { // roughly within 1-2 cells
+                if (d < min_dist) {
+                    min_dist = d;
+                    // Simplistic escape: move in opposite direction
+                    if (abs(dx) > abs(dy)) danger_dir = (dx > 0) ? LEFT : RIGHT;
+                    else danger_dir = (dy > 0) ? UP : DOWN;
+                }
+            }
+        }
+    }
+
+    // 2. Decide movement
+    bool force_change = !can_move(player_idx, current_dir);
+    
+    if (danger_dir != -1 && can_move(player_idx, danger_dir)) {
+        bandmemberSet[player_idx]->changeDir(danger_dir);
+        moving_flag = true;
+    }
+    else if (force_change || (rand() % 60 == 0)) {
+        std::vector<int> valid_dirs;
+        for (int d = LEFT; d <= DOWN; d++) {
+            if (can_move(player_idx, d)) {
+                valid_dirs.push_back(d);
+            }
+        }
+        
+        if (!valid_dirs.empty()) {
+            int new_dir = valid_dirs[rand() % valid_dirs.size()];
+            bandmemberSet[player_idx]->changeDir(new_dir);
+            moving_flag = true;
+        } else {
+            moving_flag = false;
+        }
+    } else {
+        moving_flag = true;
+    }
+
+    // 3. Bomb placement logic
+    // AI has a chance to drop a bomb if near a stone
+    if (rand() % 120 == 0) {
+        int x = bandmemberSet[player_idx]->getX();
+        int y = bandmemberSet[player_idx]->getY();
+        int grid_x = (x + grid_width / 2) / grid_width;
+        int grid_y = (y + grid_height / 2) / grid_height;
+        int idx = grid_y * 15 + grid_x;
+
+        // Check adjacent cells for stones
+        bool stone_nearby = false;
+        int adj[] = {idx - 1, idx + 1, idx - 15, idx + 15};
+        for (int i = 0; i < 4; i++) {
+            if (level->isStone(adj[i])) {
+                stone_nearby = true;
+                break;
+            }
+        }
+
+        if (stone_nearby) {
+            // Check if there's already a bomb at this location
+            bool already_bombed = false;
+            int gx = (x + grid_width / 2) / grid_width * grid_width;
+            int gy = (y + grid_height / 2) / grid_height * grid_height;
+            for (auto b : bombSet) {
+                if (b->getX() == gx && b->getY() == gy) {
+                    already_bombed = true;
+                    break;
+                }
+            }
+            if (!already_bombed) {
+                Bomb* bomb = new Bomb(x, y, BandMemberClass[player_idx]);
+                bombSet.push_back(bomb);
+            }
+        }
+    }
 }
 
 int

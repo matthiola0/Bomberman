@@ -87,7 +87,8 @@ public:
     // detect if mouse hovers over a rectangle
     bool mouse_hover(int, int, int, int);
     // detect if a bandmember will be on road
-    // bool isOnRoad(int, int);
+    bool can_move(int player_idx, int dir);
+    void update_ai(int player_idx, bool &moving_flag);
 
     // Tower* create_tower(int);
     // Monster* create_monster();

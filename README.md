@@ -14,6 +14,10 @@ Players control members of the "Kessoku Band," using their instruments as bombs 
 * **Varied Maps**: Includes three themed maps: School, STARRY live house, and Bocchi's Room.
 * **Dynamic Environments**: Some obstacles on the map can be destroyed and may drop power-up items.
 * **High Risk, High Reward**: Beware! If you're caught in an explosion — even your own — your captured territory will reset to zero!
+* **🤖 Intelligent AI System**:
+    * **Collision Awareness**: AI intelligently navigates around obstacles instead of moving randomly.
+    * **Strategic Bombing**: AI targets destructible stones to clear paths and maximize scoring.
+    * **Danger Evasion**: AI detects active bombs and proactively moves to safe zones before detonation.
 
 ---
 
@@ -27,13 +31,13 @@ Within the time limit, use bomb explosions to color as many floor tiles as possi
 
 #### Player 1
 
-* Move: Arrow Keys (↑ ↓ ← →)
+* Move: `W A S D`
 * Place Bomb: `Space`
 
 #### Player 2
 
-* Move: `W A S D`
-* Place Bomb: `Left Shift`
+* Move: Arrow Keys (↑ ↓ ← →)
+* Place Bomb: `Enter`
 
 ---
 
