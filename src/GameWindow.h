@@ -89,6 +89,7 @@ public:
     // detect if a bandmember will be on road
     bool can_move(int player_idx, int dir);
     void update_ai(int player_idx, bool &moving_flag);
+    void update_smart_ai(int player_idx, bool &moving_flag);
     void enter_game(int map_id);
     // Tower* create_tower(int);
     // Monster* create_monster();

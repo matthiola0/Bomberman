@@ -14,10 +14,17 @@ Players control members of the "Kessoku Band," using their instruments as bombs 
 * **Varied Maps**: Includes three themed maps: School, STARRY live house, and Bocchi's Room.
 * **Dynamic Environments**: Some obstacles on the map can be destroyed and may drop power-up items.
 * **High Risk, High Reward**: Beware! If you're caught in an explosion — even your own — your captured territory will reset to zero!
-* **🤖 Intelligent AI System**:
-    * **Collision Awareness**: AI intelligently navigates around obstacles instead of moving randomly.
-    * **Strategic Bombing**: AI targets destructible stones to clear paths and maximize scoring.
-    * **Danger Evasion**: AI detects active bombs and proactively moves to safe zones before detonation.
+* **🤖 Hybrid AI System**:
+    * **Standard AI (Bocchi, Nijika, Ryo)**:
+        * **Collision Awareness**: Intelligently navigates around obstacles.
+        * **Reactive Bombing**: Targets nearby stones to clear paths and score points.
+        * **Danger Evasion**: Detects active bombs and moves to safe zones.
+    * **"Strong AI" (Ikuyo Kita - Player 4)**:
+        * **BFS Pathfinding**: Uses Breadth-First Search to calculate the absolute shortest path to the human player.
+        * **Active Hunter Logic**: Actively tracks and pursues the player across the map, rather than moving semi-randomly.
+        * **Strategic Territory Expansion**: Specifically targets uncolored or opponent-controlled tiles to maximize territory gain.
+        * **Obstacle Clearing**: Dynamically identifies stones blocking the shortest path to the player and bombs them strategically.
+        * **Owned-Tile Awareness**: Intelligently avoids placing bombs on tiles already controlled by the AI, preventing self-disruption and territory loss.
 
 ---
 
