@@ -57,11 +57,22 @@ click to open vedio
 
 ## 🛠️ Installation & Compilation
 
-This project uses the Allegro 5 library. Please ensure you have a C++ compiler (e.g., GCC/G++) and Code::Blocks installed.
+This project uses the Allegro 5 library. Please ensure you have a C++ compiler (e.g., GCC/G++) and MinGW (mingw32-make) installed.
 
-1. Open Code::Blocks.
-2. Load the project file `BoboGame.cbp`.
-3. Click Build and Run to start the game.
+### Option 1: Using VS Code (Recommended)
+1. Open the project folder in VS Code.
+2. Press **F5** to compile and run the game automatically (using the provided `.vscode` configurations).
+
+### Option 2: Using Command Line
+1. Open a terminal in the project folder.
+2. Run the following command to compile:
+   ```bash
+   mingw32-make
+   ```
+3. Run the game:
+   ```bash
+   ./Bomberman.exe
+   ```
 
 If you encounter any issues during installation or compilation, refer to the included guide: `tutorial/Allegro_install_i2p2.pdf`.
 
