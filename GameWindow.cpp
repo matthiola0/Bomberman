@@ -1,6 +1,8 @@
 #include "GameWindow.h"
 #include "global.h"
 #include <iostream>
+#include <cmath>
+#include <cstdlib>
 
 #define WHITE al_map_rgb(255, 255, 255)
 #define BLACK al_map_rgb(0, 0, 0)
@@ -374,10 +376,10 @@ GameWindow::game_reset()
     redraw = false;
     menu->Reset();
 
-    player1 = BOCCHI;
-    player2 = IJICHI;
-    player3 = YAMADA;
-    player4 = KITA;
+    // Re-populate bandmemberSet
+    for (int i = BOCCHI; i <= KITA; i++) {
+        bandmemberSet.push_back(new BandMember(i));
+    }
 
     // stop sample instance
     al_stop_sample_instance(backgroundSound);
@@ -442,6 +444,9 @@ GameWindow::game_destroy()
 }
 
 bool GameWindow::can_move(int player_idx, int dir) {
+    if (bandmemberSet.empty() || player_idx < 0 || player_idx >= (int)bandmemberSet.size()) return false;
+    if (!bandmemberSet[player_idx]) return false;
+
     int x_now = bandmemberSet[player_idx]->getX();
     int y_now = bandmemberSet[player_idx]->getY();
     int speed = 3; // Use a slightly larger step for better collision detection
@@ -458,6 +463,10 @@ bool GameWindow::can_move(int player_idx, int dir) {
 }
 
 void GameWindow::update_ai(int player_idx, bool &moving_flag) {
+    if (bandmemberSet.empty() || player_idx < 0 || player_idx >= (int)bandmemberSet.size()) return;
+
+    if (!bandmemberSet[player_idx]) return;
+
     int current_dir = bandmemberSet[player_idx]->getDir();
     
     // 1. Check for nearby danger (bombs about to explode)
@@ -467,7 +476,7 @@ void GameWindow::update_ai(int player_idx, bool &moving_flag) {
     float min_dist = 999999;
 
     for (auto b : bombSet) {
-        if (b->get_counter() > 60) { // Bomb is dangerous after 1 second
+        if (b && b->get_counter() > 60) { // Bomb is dangerous after 1 second
             float dx = b->getX() - ai_x;
             float dy = b->getY() - ai_y;
             float d = dx*dx + dy*dy;
@@ -551,10 +560,6 @@ GameWindow::process_event()
 {
     int i;
     int instruction = GAME_CONTINUE;
-
-    // offset for pause window
-    int offsetX = field_width/2 - 200;
-    int offsetY = field_height/2 - 200;
 
     al_wait_for_event(event_queue, &event);
     redraw = false;
@@ -958,30 +963,38 @@ GameWindow::process_event()
                         moving3 = false;
                         moving4 = false;
                         level->Reset(1);
+                        menu->set_game_started(true);
+                        al_start_timer(timer);
                         scene = GAMESCHOOL;
                     }
                     else if(mouse_hover(0,200,800,200)) {
                         menu->Reset();
                         for (int it = BOCCHI; it <= KITA; it++) {
-                            bandmemberSet[it]->Reset();
+                            if (it < (int)bandmemberSet.size() && bandmemberSet[it])
+                                bandmemberSet[it]->Reset();
                         }
                         moving1 = false;
                         moving2 = false;
                         moving3 = false;
                         moving4 = false;
                         level->Reset(2);
+                        menu->set_game_started(true);
+                        al_start_timer(timer);
                         scene = GAMEHOME;
                     }
                     else if(mouse_hover(0,400,800,200)) {
                         menu->Reset();
                         for (int it = BOCCHI; it <= KITA; it++) {
-                            bandmemberSet[it]->Reset();
+                            if (it < (int)bandmemberSet.size() && bandmemberSet[it])
+                                bandmemberSet[it]->Reset();
                         }
                         moving1 = false;
                         moving2 = false;
                         moving3 = false;
                         moving4 = false;
                         level->Reset(3);
+                        menu->set_game_started(true);
+                        al_start_timer(timer);
                         scene = GAMESTARRY;
                     }
                 case GAMEEND:
@@ -1236,11 +1249,9 @@ GameWindow::draw_running_map(int scene)
 
     // draw bandmember
     // fprintf(stderr, "DEBUG: Drawing game objects now...\n");
-    for (int i = BOCCHI; i <= KITA; i++) 
+    for (int i = 0; i < (int)bandmemberSet.size(); i++) 
     {
-        // fprintf(stderr, "DEBUG: Attempting to call Draw() for BandMember %d.\n", i);
-        bandmemberSet[i]->Draw();
-        // fprintf(stderr, "DEBUG: OK.\n");
+        if (bandmemberSet[i]) bandmemberSet[i]->Draw();
     }
 
     // draw bomb && fire
@@ -1429,7 +1440,6 @@ GameWindow::draw_pause() {
     al_clear_to_color(al_map_rgb(100, 100, 100));
     al_draw_bitmap(background_pause, 0, 0, 0);
 
-    // printf("PASS\n");y
     al_flip_display();
 }
 

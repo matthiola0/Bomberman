@@ -49,29 +49,28 @@ Bomb::Load(char* name)
 void
 Bomb::Draw()
 {
-    al_draw_bitmap(img, circle->x - circle->r, circle->y - circle->r, 0);
-    // printf("PASS\n");
+    if (img) al_draw_bitmap(img, circle->x - circle->r, circle->y - circle->r, 0);
 }
 
 void
 Bomb::DrawFire()
 {
-    al_draw_bitmap(img_left, circle->x-grid_width - circle->r, circle->y - circle->r, 0);
-    al_draw_bitmap(img_right, circle->x+grid_width - circle->r, circle->y - circle->r, 0);
-    al_draw_bitmap(img_up, circle->x - circle->r, circle->y-grid_height - circle->r, 0);
-    al_draw_bitmap(img_down, circle->x - circle->r, circle->y+grid_height - circle->r, 0);
+    if (img_left) al_draw_bitmap(img_left, circle->x-grid_width - circle->r, circle->y - circle->r, 0);
+    if (img_right) al_draw_bitmap(img_right, circle->x+grid_width - circle->r, circle->y - circle->r, 0);
+    if (img_up) al_draw_bitmap(img_up, circle->x - circle->r, circle->y-grid_height - circle->r, 0);
+    if (img_down) al_draw_bitmap(img_down, circle->x - circle->r, circle->y+grid_height - circle->r, 0);
 }
 
 void
 Bomb::DrawFire(bool left, bool right, bool up, bool down)
 {
-    if(left)
+    if(left && img_left)
         al_draw_bitmap(img_left, circle->x-grid_width - circle->r, circle->y - circle->r, 0);
-    if(right)
+    if(right && img_right)
         al_draw_bitmap(img_right, circle->x+grid_width - circle->r, circle->y - circle->r, 0);
-    if(up)
+    if(up && img_up)
         al_draw_bitmap(img_up, circle->x - circle->r, circle->y-grid_height - circle->r, 0);
-    if(down)
+    if(down && img_down)
         al_draw_bitmap(img_down, circle->x - circle->r, circle->y+grid_height - circle->r, 0);
 }
 
