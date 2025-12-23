@@ -1,0 +1,9 @@
+*.o
+*.exe
+build_error.log
+build_err.txt
+build.log
+allegro.log
+.vscode/
+*.cbp
+*.layout

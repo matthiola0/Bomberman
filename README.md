@@ -14,6 +14,17 @@ Players control members of the "Kessoku Band," using their instruments as bombs 
 * **Varied Maps**: Includes three themed maps: School, STARRY live house, and Bocchi's Room.
 * **Dynamic Environments**: Some obstacles on the map can be destroyed and may drop power-up items.
 * **High Risk, High Reward**: Beware! If you're caught in an explosion — even your own — your captured territory will reset to zero!
+* **🤖 Hybrid AI System**:
+    * **Standard AI (Bocchi, Nijika, Ryo)**:
+        * **Collision Awareness**: Intelligently navigates around obstacles.
+        * **Reactive Bombing**: Targets nearby stones to clear paths and score points.
+        * **Danger Evasion**: Detects active bombs and moves to safe zones.
+    * **"Strong AI" (Ikuyo Kita - Player 4)**:
+        * **BFS Pathfinding**: Uses Breadth-First Search to calculate the absolute shortest path to the human player.
+        * **Active Hunter Logic**: Actively tracks and pursues the player across the map, rather than moving semi-randomly.
+        * **Strategic Territory Expansion**: Specifically targets uncolored or opponent-controlled tiles to maximize territory gain.
+        * **Obstacle Clearing**: Dynamically identifies stones blocking the shortest path to the player and bombs them strategically.
+        * **Owned-Tile Awareness**: Intelligently avoids placing bombs on tiles already controlled by the AI, preventing self-disruption and territory loss.
 
 ---
 
@@ -27,13 +38,13 @@ Within the time limit, use bomb explosions to color as many floor tiles as possi
 
 #### Player 1
 
-* Move: Arrow Keys (↑ ↓ ← →)
+* Move: `W A S D`
 * Place Bomb: `Space`
 
 #### Player 2
 
-* Move: `W A S D`
-* Place Bomb: `Left Shift`
+* Move: Arrow Keys (↑ ↓ ← →)
+* Place Bomb: `Enter`
 
 ---
 
@@ -41,15 +52,15 @@ Within the time limit, use bomb explosions to color as many floor tiles as possi
 
 ### Screenshots
 
-![Screenshot 1](images/image1.png)
-![Screenshot 2](images/image2.png)
-![Screenshot 3](images/image3.png)
-![Screenshot 4](images/image4.png)
+![Screenshot 1](src/images/image1.png)
+![Screenshot 2](src/images/image2.png)
+![Screenshot 3](src/images/image3.png)
+![Screenshot 4](src/images/image4.png)
 
 
 ### Gameplay Video
 
-click to open vedio
+click to open video
 [![Watch the demo](https://img.youtube.com/vi/plwuGUrNsGw/0.jpg)](https://www.youtube.com/watch?v=plwuGUrNsGw)
 
 
@@ -57,13 +68,37 @@ click to open vedio
 
 ## 🛠️ Installation & Compilation
 
-This project uses the Allegro 5 library. Please ensure you have a C++ compiler (e.g., GCC/G++) and Code::Blocks installed.
+This project uses the Allegro 5 library. Please ensure you have a C++ compiler (e.g., GCC/G++) and MinGW (mingw32-make) installed.
 
-1. Open Code::Blocks.
-2. Load the project file `BoboGame.cbp`.
-3. Click Build and Run to start the game.
+### Project Structure
+* **`src/`**: Contains all source code (`.cpp`, `.h`), assets, and level configurations.
+* **`allegro/`**: Allegro 5 library files (headers and libraries).
+* **`Bomberman.exe`**: Generated the root directory.
 
-If you encounter any issues during installation or compilation, refer to the included guide: `tutorial/Allegro_install_i2p2.pdf`.
+### Build Instructions
+
+#### Option 1: Using Command Line
+1. Open a terminal in the project root folder.
+2. Enter the `src` directory:
+   ```bash
+   cd src
+   ```
+3. Run the following command to compile:
+   ```bash
+   mingw32-make
+   ```
+4. Find the generated `Bomberman.exe` in the root directory.
+5. Return to the root directory and run the game:
+   ```bash
+   cd ..
+   ./Bomberman.exe
+   ```
+
+#### Option 2: Using VS Code
+1. Open the project folder in VS Code.
+2. Press **F5** to compile and run the game automatically (using the provided `.vscode` configurations which point to `src/Makefile`).
+
+If you encounter any issues during installation or compilation, refer to the included guide: `src/tutorial/Allegro_install_i2p2.pdf`.
 
 ---
 
