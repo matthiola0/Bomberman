@@ -33,10 +33,13 @@ LEVEL::setLevel(const int level)
 
     sprintf(buffer, "LEVEL%d.txt", level);
     file = fopen(buffer, "r");
+    if (!file) {
+        fprintf(stderr, "Error: Could not open level file %s\n", buffer);
+        return;
+    }
 
     this->level = level;
-    // this->road_grid.clear();
-
+    
     for(int i = 0; i < NumOfGrid; i++)
     {
         this->levelMap[i].roadPoint = false;
@@ -46,19 +49,24 @@ LEVEL::setLevel(const int level)
         this->levelMap[i].speed_tool = false;
     }
 
-    int tmp;
+    int tmp_val;
     while(fscanf(file, "%s", buffer) != EOF) {
-        int tmp = atoi(buffer);
-        if (tmp > 1000) {
-            tmp -= 1000;
-            this->levelMap[tmp].stone = true;
-            this->levelMap[tmp].roadPoint = false;
-            this->levelMap[tmp].have_color = false;
+        tmp_val = atoi(buffer);
+        bool is_stone = false;
+        if (tmp_val > 1000) {
+            tmp_val -= 1000;
+            is_stone = true;
         }
-        else {
-            this->levelMap[tmp].stone = false;
-            this->levelMap[tmp].roadPoint = true;
-            this->levelMap[tmp].have_color = false;
+
+        if (tmp_val >= 0 && tmp_val < NumOfGrid) {
+            if (is_stone) {
+                this->levelMap[tmp_val].stone = true;
+                this->levelMap[tmp_val].roadPoint = false;
+            } else {
+                this->levelMap[tmp_val].stone = false;
+                this->levelMap[tmp_val].roadPoint = true;
+            }
+            this->levelMap[tmp_val].have_color = false;
         }
     }
 

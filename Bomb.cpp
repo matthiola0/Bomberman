@@ -58,8 +58,8 @@ Bomb::DrawFire()
 {
     al_draw_bitmap(img_left, circle->x-grid_width - circle->r, circle->y - circle->r, 0);
     al_draw_bitmap(img_right, circle->x+grid_width - circle->r, circle->y - circle->r, 0);
-    al_draw_bitmap(img_down, circle->x - circle->r, circle->y-grid_height - circle->r, 0);
-    al_draw_bitmap(img_up, circle->x - circle->r, circle->y+grid_height - circle->r, 0);
+    al_draw_bitmap(img_up, circle->x - circle->r, circle->y-grid_height - circle->r, 0);
+    al_draw_bitmap(img_down, circle->x - circle->r, circle->y+grid_height - circle->r, 0);
 }
 
 void
@@ -70,9 +70,9 @@ Bomb::DrawFire(bool left, bool right, bool up, bool down)
     if(right)
         al_draw_bitmap(img_right, circle->x+grid_width - circle->r, circle->y - circle->r, 0);
     if(up)
-        al_draw_bitmap(img_down, circle->x - circle->r, circle->y-grid_height - circle->r, 0);
+        al_draw_bitmap(img_up, circle->x - circle->r, circle->y-grid_height - circle->r, 0);
     if(down)
-        al_draw_bitmap(img_up, circle->x - circle->r, circle->y+grid_height - circle->r, 0);
+        al_draw_bitmap(img_down, circle->x - circle->r, circle->y+grid_height - circle->r, 0);
 }
 
 void 

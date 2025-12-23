@@ -404,7 +404,14 @@ GameWindow::game_update()
 void
 GameWindow::game_reset()
 {
+    for (auto b : bandmemberSet) {
+        delete b;
+    }
     bandmemberSet.clear();
+
+    for (auto b : bombSet) {
+        delete b;
+    }
     bombSet.clear();
 
     moving1 = false;
@@ -1208,7 +1215,6 @@ GameWindow::draw_running_map(int scene)
                 else
                     DIR[dir] = false;
             }
-            // fprintf(stderr, "DEBUG: Attempting to call DrawFire() for a Bomb.\n");
             (*it)->DrawFire(DIR[LEFT], DIR[RIGHT], DIR[UP], DIR[DOWN]);
             // fprintf(stderr, "DEBUG: OK.\n");
             it++;
@@ -1217,8 +1223,8 @@ GameWindow::draw_running_map(int scene)
             int idx_cur = ((*it)->getY() * 15 + (*it)->getX())/40;
             int idx_left = idx_cur - 1;
             int idx_right = idx_cur + 1;
-            int idx_down = idx_cur - 15;
-            int idx_up = idx_cur + 15;
+            int idx_up = idx_cur - 15;
+            int idx_down = idx_cur + 15;
             if(level->isStone(idx_left)) {
                 level->stone_bomb(idx_left);
                 level->speed_emerge(idx_left);
@@ -1248,7 +1254,8 @@ GameWindow::draw_running_map(int scene)
             level->bomb_not(idx_up);
             
         
-            bombSet.erase(it);
+            delete (*it);
+            it = bombSet.erase(it);
         }
     }
 

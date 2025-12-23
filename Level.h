@@ -27,35 +27,55 @@ public:
     void Reset(int);
     
     void setLevel(const int);
-    bool isRoad(int index) { return levelMap[index].roadPoint; }
-    bool isStone(int index) { return levelMap[index].stone; }
-    bool haveColor(int index) { return levelMap[index].have_color; }
-    bool is_bombing(int index) { return levelMap[index].bombing; }   // fire now?
+    bool isRoad(int index) { 
+        if (index < 0 || index >= NumOfGrid) return false;
+        return levelMap[index].roadPoint; 
+    }
+    bool isStone(int index) { 
+        if (index < 0 || index >= NumOfGrid) return false;
+        return levelMap[index].stone; 
+    }
+    bool haveColor(int index) { 
+        if (index < 0 || index >= NumOfGrid) return false;
+        return levelMap[index].have_color; 
+    }
+    bool is_bombing(int index) { 
+        if (index < 0 || index >= NumOfGrid) return false;
+        return levelMap[index].bombing; 
+    }
     void bomb_yes(int index) { 
-        levelMap[index].bombing = true; 
+        if (index >= 0 && index < NumOfGrid) levelMap[index].bombing = true; 
     } 
     void bomb_not(int index) { 
-        levelMap[index].bombing = false; 
+        if (index >= 0 && index < NumOfGrid) levelMap[index].bombing = false; 
     }
-    int get_character(int index) { return levelMap[index].character; }
+    int get_character(int index) { 
+        if (index < 0 || index >= NumOfGrid) return 0;
+        return levelMap[index].character; 
+    }
     void change_character(int index, int ch) {
-        levelMap[index].have_color = true;
-        levelMap[index].character = ch;
+        if (index >= 0 && index < NumOfGrid) {
+            levelMap[index].have_color = true;
+            levelMap[index].character = ch;
+        }
     }
 
     void stone_bomb(int index) {
-        levelMap[index].roadPoint = true;
-        levelMap[index].stone = false;
+        if (index >= 0 && index < NumOfGrid) {
+            levelMap[index].roadPoint = true;
+            levelMap[index].stone = false;
+        }
     }
 
     bool have_speed(int index) {
+        if (index < 0 || index >= NumOfGrid) return false;
         return levelMap[index].speed_tool;
     }
     void speed_emerge(int index) {
-        levelMap[index].speed_tool = true;
+        if (index >= 0 && index < NumOfGrid) levelMap[index].speed_tool = true;
     }
     void speed_disappear(int index) {
-        levelMap[index].speed_tool = false;
+        if (index >= 0 && index < NumOfGrid) levelMap[index].speed_tool = false;
     }
 
     void clear_color(int);
